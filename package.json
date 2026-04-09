@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@nozbe/watermelondb": "^0.28.0",
     "@react-navigation/native": "^7.0.14",
     "@rn-primitives/portal": "^1.4.0",
     "@rn-primitives/slot": "^1.4.0",
@@ -37,6 +38,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.29.0",
     "@types/react": "~19.1.10",
     "typescript": "~5.9.2"
   },
