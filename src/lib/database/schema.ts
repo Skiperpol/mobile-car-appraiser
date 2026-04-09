@@ -46,5 +46,15 @@ export default appSchema({
         { name: 'updated_at', type: 'number' },
       ],
     }),
+    tableSchema({
+      name: 'report_attachments',
+      columns: [
+        { name: 'report_id', type: 'string', isIndexed: true },
+        { name: 'url', type: 'string' },
+        { name: 'comment', type: 'string', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+      ],
+    }),
   ],
 })
