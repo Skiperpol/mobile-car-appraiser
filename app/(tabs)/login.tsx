@@ -1,25 +1,22 @@
-import { Text, View } from "@/src/components/Themed";
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
+import { Text, View } from "@/components/Themed";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Image } from "react-native";
 export default function Login() {
   return (
     <View className="flex-1 items-center justify-center">
-      <Image source={require("@/src/assets/images/login-image.jpg")} />
-      <Text className="text-center text-2xl font-bold">
-        Welcome back to the app. Please enter your email and password to
-        continue.
-      </Text>
-      <Input
-        placeholder="Email"
-        className="border-2 border-gray-300 rounded-md p-2"
+      <Image
+        source={require("@/assets/images/login-image.jpg")}
+        className="w-full h-full object-cover"
       />
-      <Input
-        placeholder="Password"
-        className="border-2 border-gray-300 rounded-md p-2"
-      />
+      <Text className="text-center text-2xl font-bold">Witaj ponownie</Text>
+      <Input placeholder="Email" />
+      <Input placeholder="Password" />
+      <Checkbox checked={false} onCheckedChange={() => {}} />
+      <Text>Zapamiętaj mnie</Text>
       <Button>
-        <ButtonText>Login</ButtonText>
+        <Text>Zaloguj się</Text>
       </Button>
     </View>
   );
