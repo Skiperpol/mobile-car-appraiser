@@ -10,8 +10,8 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import "../global.css";
 
-import { useColorScheme } from "@/components/useColorScheme";
-
+import { useColorScheme } from "@/src/components/useColorScheme";
+import { PortalHost } from "@rn-primitives/portal";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary
@@ -57,6 +57,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
+      <PortalHost />
     </ThemeProvider>
   );
 }
