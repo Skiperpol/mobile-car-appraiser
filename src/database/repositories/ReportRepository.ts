@@ -1,4 +1,4 @@
-import ReportModel, { IReport } from "@/src/database/models/ReportModel";
+import ReportModel, { IReport } from "@/database/models/ReportModel";
 import { Database } from "@nozbe/watermelondb";
 import { database } from "..";
 

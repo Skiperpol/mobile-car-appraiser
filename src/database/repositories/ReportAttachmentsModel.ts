@@ -1,6 +1,6 @@
 import ReportAttachmentsModel, {
   IReportAttachments,
-} from "@/src/database/models/ReportAttachmentsModel";
+} from "@/database/models/ReportAttachmentsModel";
 import { Database } from "@nozbe/watermelondb";
 import { database } from "..";
 

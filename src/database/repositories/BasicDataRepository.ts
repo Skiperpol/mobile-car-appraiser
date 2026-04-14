@@ -1,6 +1,6 @@
 import BasicDataModel, {
   IBasicData,
-} from "@/src/database/models/BasicDataModel";
+} from "@/database/models/BasicDataModel";
 import { Database } from "@nozbe/watermelondb";
 import { database } from "..";
 

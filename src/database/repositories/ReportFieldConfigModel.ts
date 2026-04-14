@@ -1,6 +1,6 @@
 import ReportFieldConfigModel, {
   IReportFieldConfig,
-} from "@/src/database/models/ReportFieldConfigModel";
+} from "@/database/models/ReportFieldConfigModel";
 import { Database } from "@nozbe/watermelondb";
 import { database } from "..";
 

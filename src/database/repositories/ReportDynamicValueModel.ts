@@ -1,6 +1,6 @@
 import ReportDynamicValueModel, {
   IReportDynamicValue,
-} from "@/src/database/models/ReportDynamicValueModel";
+} from "@/database/models/ReportDynamicValueModel";
 import { Database } from "@nozbe/watermelondb";
 import { database } from "..";
 
