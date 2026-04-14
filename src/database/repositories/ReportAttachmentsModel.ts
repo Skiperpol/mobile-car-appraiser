@@ -1,7 +1,8 @@
 import ReportAttachmentsModel, {
-    IReportAttachments,
+  IReportAttachments,
 } from "@/src/database/models/ReportAttachmentsModel";
 import { Database } from "@nozbe/watermelondb";
+import { database } from "..";
 
 class ReportAttachmentsRepository {
   private db: Database;
@@ -63,4 +64,5 @@ class ReportAttachmentsRepository {
   }
 }
 
-export default ReportAttachmentsRepository;
+const reportAttachmentsRepository = new ReportAttachmentsRepository(database);
+export default reportAttachmentsRepository;

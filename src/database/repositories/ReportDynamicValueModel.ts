@@ -1,7 +1,8 @@
 import ReportDynamicValueModel, {
-    IReportDynamicValue,
+  IReportDynamicValue,
 } from "@/src/database/models/ReportDynamicValueModel";
 import { Database } from "@nozbe/watermelondb";
+import { database } from "..";
 
 class ReportDynamicValueRepository {
   private db: Database;
@@ -66,4 +67,5 @@ class ReportDynamicValueRepository {
   }
 }
 
-export default ReportDynamicValueRepository;
+const reportDynamicValueRepository = new ReportDynamicValueRepository(database);
+export default reportDynamicValueRepository;

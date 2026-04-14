@@ -1,7 +1,8 @@
 import BasicDataModel, {
-    IBasicData,
+  IBasicData,
 } from "@/src/database/models/BasicDataModel";
 import { Database } from "@nozbe/watermelondb";
+import { database } from "..";
 
 class BasicDataRepository {
   private db: Database;
@@ -69,4 +70,5 @@ class BasicDataRepository {
   }
 }
 
-export default BasicDataRepository;
+const basicDataRepository = new BasicDataRepository(database);
+export default basicDataRepository;

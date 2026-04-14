@@ -1,5 +1,6 @@
 import ReportModel, { IReport } from "@/src/database/models/ReportModel";
 import { Database } from "@nozbe/watermelondb";
+import { database } from "..";
 
 class ReportRepository {
   private db: Database;
@@ -59,4 +60,5 @@ class ReportRepository {
   }
 }
 
-export default ReportRepository;
+const reportRepository = new ReportRepository(database);
+export default reportRepository;

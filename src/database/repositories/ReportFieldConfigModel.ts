@@ -1,7 +1,8 @@
 import ReportFieldConfigModel, {
-    IReportFieldConfig,
+  IReportFieldConfig,
 } from "@/src/database/models/ReportFieldConfigModel";
 import { Database } from "@nozbe/watermelondb";
+import { database } from "..";
 
 class ReportFieldConfigRepository {
   private db: Database;
@@ -64,4 +65,5 @@ class ReportFieldConfigRepository {
   }
 }
 
-export default ReportFieldConfigRepository;
+const reportFieldConfigRepository = new ReportFieldConfigRepository(database);
+export default reportFieldConfigRepository;
