@@ -1,62 +1,65 @@
-import { Q } from '@nozbe/watermelondb';
-import { database } from '../index';
-import Report from '../models/Report';
+import { Q } from "@nozbe/watermelondb";
+import { database } from "../index";
+import ReportModel, { IReport } from "../models/Report";
+import { AttachmentService } from "./AttachmentsService";
+import { BasicDataService } from "./BasicDataService";
+import { DynamicValuesService } from "./DynamicValuesService";
 
-export type SortOption = 'NEWEST' | 'OLDEST' | 'TITLE_ASC';
+export type SortOption = "NEWEST" | "OLDEST" | "TITLE_ASC";
 
 class ReportService {
-  private reportsCollection = database.get<Report>('reports');
+  private reportsCollection = database.get<ReportModel>("reports");
 
-  observeReports(limit: number, sortBy: SortOption, searchTerm: string = '') {
+  observeReports(limit: number, sortBy: SortOption, searchTerm: string = "") {
     const queryArgs: any[] = [Q.take(limit)];
-  
+
     if (searchTerm.trim().length > 0) {
       const sanitizedTitle = Q.sanitizeLikeString(searchTerm.trim());
-      queryArgs.push(
-        Q.where('reportNumber', Q.like(`%${sanitizedTitle}%`))
-      );
+      queryArgs.push(Q.where("report_number", Q.like(`%${sanitizedTitle}%`)));
     }
-  
+
     switch (sortBy) {
-      case 'NEWEST':
-        queryArgs.push(Q.sortBy('created_at', Q.desc));
+      case "NEWEST":
+        queryArgs.push(Q.sortBy("created_at", Q.desc));
         break;
-      case 'OLDEST':
-        queryArgs.push(Q.sortBy('created_at', Q.asc));
+      case "OLDEST":
+        queryArgs.push(Q.sortBy("created_at", Q.asc));
         break;
-      case 'TITLE_ASC':
-        queryArgs.push(Q.sortBy('title', Q.asc));
+      case "TITLE_ASC":
+        queryArgs.push(Q.sortBy("report_number", Q.asc));
         break;
     }
-  
+
     return this.reportsCollection.query(...queryArgs).observe();
   }
 
-  async createReport(reportNumber: string, userId: string, orderId: string | null) {
+  async createReport(data: IReport) {
     return await database.write(async () => {
       return await this.reportsCollection.create((report) => {
-        report.reportNumber = reportNumber;
-        report.userId = userId;
-        report.orderId = orderId;
+        Object.assign(report, data);
       });
     });
   }
 
-  async getReportById(id: string) {
-    try {
-      return await this.reportsCollection.find(id);
-    } catch (error) {
-      console.error("Report not found:", error);
-      return null;
-    }
+  async getReportById(id: string): Promise<ReportModel | null> {
+    return await this.reportsCollection.find(id);
   }
 
-  async deleteReport(report: Report) {
+  async deleteReport(record: ReportModel) {
     await database.write(async () => {
-      await report.markAsDeleted();
+      const attachments = await record.attachments.fetch();
+      for (const attachment of attachments) {
+        await AttachmentService.deleteAttachment(attachment);
+      }
+      const dynamicValues = await record.dynamicValues.fetch();
+      for (const dynamicValue of dynamicValues) {
+        await DynamicValuesService.deleteDynamicValue(dynamicValue);
+      }
+      const basicData = await record.basicData.fetch();
+      for (const data of basicData) {
+        await BasicDataService.deleteBasicData(data);
+      }
+      await record.markAsDeleted();
     });
   }
-
 }
-
-export default new ReportService();
