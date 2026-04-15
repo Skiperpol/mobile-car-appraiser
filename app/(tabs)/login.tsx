@@ -3,7 +3,7 @@ import { LoginHeader } from "@/components/login/LoginHeader";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 
-export default function Login() {
+export default function LoginScreen() {
   const [rememberMe, setRememberMe] = useState(false);
 
   return (
