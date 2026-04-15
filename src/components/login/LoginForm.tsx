@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
+import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 
 type LoginFormProps = {
@@ -46,7 +47,10 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
           </Text>
         </Pressable>
 
-        <Button className="mt-4 h-14 w-full rounded-xl bg-zinc-900 active:opacity-90">
+        <Button
+          className="mt-4 h-14 w-full rounded-xl bg-zinc-900 active:opacity-90"
+          onPress={() => router.replace("/(tabs)")}
+        >
           <Text className="text-lg font-bold text-white">Zaloguj się</Text>
         </Button>
         <View className="h-4" />
