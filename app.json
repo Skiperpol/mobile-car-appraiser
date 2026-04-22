@@ -33,6 +33,9 @@
     "plugins": [
       "expo-router"
     ],
+    "extra": {
+      "lastUpdateAt": "2026-04-22"
+    },
     "experiments": {
       "typedRoutes": true
     }
