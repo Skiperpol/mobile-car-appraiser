@@ -19,7 +19,9 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
 
       <View className="gap-y-5">
         <View className="gap-2">
-          <Text className="text-sm font-semibold text-zinc-700">Email</Text>
+          <Text className="ml-1 text-sm font-semibold text-zinc-700">
+            Email
+          </Text>
           <Input
             placeholder="jan.kowalski@example.com"
             keyboardType="email-address"
@@ -29,7 +31,9 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
         </View>
 
         <View className="gap-2">
-          <Text className="text-sm font-semibold text-zinc-700">Hasło</Text>
+          <Text className="ml-1 text-sm font-semibold text-zinc-700">
+            Hasło
+          </Text>
           <Input
             placeholder="••••••••"
             secureTextEntry
