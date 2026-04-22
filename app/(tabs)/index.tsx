@@ -2,7 +2,6 @@ import Footer from "@/components/index/Footer";
 import Header from "@/components/index/Header";
 import List from "@/components/index/List";
 import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 const reports = [
   {
     id: "WYP-2024-003",
@@ -44,12 +43,10 @@ const reports = [
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-zinc-100">
-      <View className="flex-1">
-        <Header />
-        <List reports={reports} />
-        <Footer />
-      </View>
-    </SafeAreaView>
+    <View className="flex-1">
+      <Header />
+      <List reports={reports} />
+      <Footer />
+    </View>
   );
 }
