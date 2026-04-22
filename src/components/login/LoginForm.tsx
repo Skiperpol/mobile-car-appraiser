@@ -24,7 +24,7 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
             placeholder="jan.kowalski@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="h-14 rounded-xl border-zinc-200 bg-zinc-50 px-4 text-zinc-900"
+            className="h-14 px-4 bg-zinc-50 text-zinc-900"
           />
         </View>
 
@@ -33,7 +33,7 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
           <Input
             placeholder="••••••••"
             secureTextEntry
-            className="h-14 rounded-xl border-zinc-200 bg-zinc-50 px-4 text-zinc-900"
+            className="h-14 border-zinc-200 bg-zinc-50 px-4 text-zinc-900"
           />
         </View>
 
@@ -48,7 +48,7 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
         </Pressable>
 
         <Button
-          className="mt-4 h-14 w-full rounded-xl bg-zinc-900 active:opacity-90"
+          className="mt-4 h-14 w-full bg-zinc-900 active:opacity-90"
           onPress={() => router.replace("/(tabs)")}
         >
           <Text className="text-lg font-bold text-white">Zaloguj się</Text>

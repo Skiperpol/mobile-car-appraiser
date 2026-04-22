@@ -1,24 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import { useMeasuredWidth } from "../../hooks/useMeasuredWidth";
 import {
+  type Option,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-
 export function HeaderFilters() {
   const sortWidth = useMeasuredWidth();
   const statusWidth = useMeasuredWidth();
 
+  const [sort, setSort] = useState<Option | null>(null);
+  const [status, setStatus] = useState<Option | null>(null);
+
   return (
     <View className="flex-row gap-3">
       <View className="flex-1" onLayout={sortWidth.onLayout}>
-        <Select value={{ label: "Wedlug daty", value: "date" }}>
+        {/* <Text className="ml-1 text-xs font-extrabold text-zinc-500 uppercase">
+          Sortowanie
+        </Text> */}
+        <Select
+          value={sort ?? undefined}
+          onValueChange={(option) => option && setSort(option)}
+        >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Wybierz filtrowanie" />
+            <SelectValue placeholder="Wybierz sortowanie" />
           </SelectTrigger>
           <SelectContent style={sortWidth.style}>
             <SelectItem value="date" label="Wedlug daty">
@@ -31,21 +40,27 @@ export function HeaderFilters() {
         </Select>
       </View>
       <View className="flex-1" onLayout={statusWidth.onLayout}>
-        <Select value={{ label: "Wszystkie", value: "all" }}>
+        {/* <Text className="ml-1 text-xs font-extrabold text-zinc-500 uppercase">
+          Status
+        </Text> */}
+        <Select
+          value={status ?? undefined}
+          onValueChange={(option) => option && setStatus(option)}
+        >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Wybierz filtrowanie" />
+            <SelectValue placeholder="Wybierz status" />
           </SelectTrigger>
           <SelectContent style={statusWidth.style}>
-            <SelectItem value="date" label="Wedlug daty">
+            <SelectItem value="all" label="Wszystkie">
               Wszystkie
             </SelectItem>
-            <SelectItem value="name" label="Według nazwy">
-              Zsynchronizowane
+            <SelectItem value="synced" label="Wgrane">
+              Wgrane
             </SelectItem>
-            <SelectItem value="name" label="Według nazwy">
-              Niezsynchronizowane
+            <SelectItem value="not-synced" label="Oczekujące">
+              Oczekujące
             </SelectItem>
-            <SelectItem value="name" label="Według nazwy">
+            <SelectItem value="with-errors" label="Z błędami">
               Z błędami
             </SelectItem>
           </SelectContent>
