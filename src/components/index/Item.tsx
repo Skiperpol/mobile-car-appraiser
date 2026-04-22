@@ -14,11 +14,11 @@ export default function Item({ report }: { report: Report }) {
   return (
     <Pressable
       key={report.id}
-      className="rounded-2xl border border-zinc-300 bg-white p-3"
+      className="rounded-md border border-zinc-300 bg-white p-3"
     >
       <View className="flex-row">
         <View
-          className={`mr-3 h-20 w-20 items-center justify-center rounded-2xl ${report.tileColor}`}
+          className={`mr-3 h-20 w-20 items-center justify-center rounded-md ${report.tileColor}`}
         >
           <Text className="text-center text-sm text-white">{report.plate}</Text>
         </View>
