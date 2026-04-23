@@ -18,7 +18,7 @@ export default function List({ reports }: { reports: Report[] }) {
       contentContainerStyle={{ paddingBottom: 28 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className="border-t border-zinc-200  px-3 pt-3">
+      <View className="p-3">
         <View className="gap-3">
           {reports.map((report) => (
             <Item key={report.id} report={report} />

@@ -18,9 +18,9 @@ export function SettingsCard({
       className={`mb-3 rounded-xl border border-zinc-200 bg-zinc-50 p-3 ${className ?? ""}`}
       {...props}
     >
-      <Text className="text-sm font-semibold text-zinc-900">{title}</Text>
+      <Text className="text-lg font-semibold text-zinc-900">{title}</Text>
       {description ? (
-        <Text className="mt-0.5 text-xs text-zinc-500">{description}</Text>
+        <Text className="mt-0.5 text-sm text-zinc-500">{description}</Text>
       ) : null}
       {children}
     </View>

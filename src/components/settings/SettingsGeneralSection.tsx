@@ -12,8 +12,8 @@ export function SettingsGeneralSection() {
     <SettingsCard title="Ogolne" description="Podstawowe ustawienia aplikacji">
       <View className="mt-4 flex-row items-center justify-between">
         <View className="mr-3 flex-1">
-          <Text className="text-xs font-semibold text-zinc-900">Motyw</Text>
-          <Text className="mt-0.5 text-xs text-zinc-500">
+          <Text className="text-lg font-semibold text-zinc-900">Motyw</Text>
+          <Text className="mt-0.5 text-sm text-zinc-500">
             Przelaczaj miedzy motywem dziennym a nocnym
           </Text>
         </View>
@@ -26,7 +26,9 @@ export function SettingsGeneralSection() {
           ) : (
             <Sun size={12} color="#52525b" />
           )}
-          <Text className="ml-1.5 text-xs font-medium text-zinc-700">{label}</Text>
+          <Text className="ml-1.5 text-xs font-medium text-zinc-700">
+            {label}
+          </Text>
         </Pressable>
       </View>
     </SettingsCard>

@@ -6,8 +6,8 @@ import { View } from "react-native";
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <View className="mt-2 flex-row items-center justify-between">
-      <Text className="text-xs text-zinc-500">{label}</Text>
-      <Text className="text-xs font-medium text-zinc-800">{value}</Text>
+      <Text className="text-sm text-zinc-500">{label}</Text>
+      <Text className="text-sm font-medium text-zinc-800">{value}</Text>
     </View>
   );
 }

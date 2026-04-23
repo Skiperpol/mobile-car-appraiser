@@ -10,7 +10,12 @@ export default function HeaderComponent({
   className?: string;
 }) {
   return (
-    <View className={cn("p-4 bg-white flex flex-col gap-4", className)}>
+    <View
+      className={cn(
+        "border-b p-4 bg-white flex flex-col gap-4 border-zinc-200",
+        className,
+      )}
+    >
       {children}
     </View>
   );

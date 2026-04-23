@@ -10,7 +10,7 @@ export default function SettingsScreen() {
     <View className="flex-1 bg-zinc-100">
       <Header />
       <ScrollView
-        contentContainerClassName="px-3 pb-4"
+        contentContainerClassName="p-3"
         showsVerticalScrollIndicator={false}
       >
         <SettingsGeneralSection />
