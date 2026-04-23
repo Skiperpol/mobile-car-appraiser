@@ -9,6 +9,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from "lucide-react-native";
+import type { LucideIcon } from "lucide-react-native";
 import * as React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { FadeIn, FadeOut } from "react-native-reanimated";
@@ -165,9 +166,10 @@ function SelectLabel({
 
 function SelectItem({
   className,
+  icon,
   children,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Item>) {
+}: React.ComponentProps<typeof SelectPrimitive.Item> & { icon?: LucideIcon }) {
   return (
     <SelectPrimitive.Item
       className={cn(
@@ -185,6 +187,7 @@ function SelectItem({
           <Icon as={Check} className="text-muted-foreground size-4 shrink-0" />
         </SelectPrimitive.ItemIndicator>
       </View>
+      {icon ? <Icon as={icon} className="text-muted-foreground size-4" /> : null}
       <SelectPrimitive.ItemText className="text-foreground group-active:text-accent-foreground select-none text-sm" />
     </SelectPrimitive.Item>
   );

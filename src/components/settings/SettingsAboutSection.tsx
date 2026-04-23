@@ -17,8 +17,8 @@ export function SettingsAboutSection() {
 
   return (
     <SettingsCard title="O aplikacji">
-      <MetaRow label="Wersja aplikacji" value={version} />
-      <MetaRow label="Ostatnia aktualizacja" value={lastUpdate} />
+      <MetaRow label="Wersja aplikacji:" value={version} />
+      <MetaRow label="Ostatnia aktualizacja:" value={lastUpdate} />
     </SettingsCard>
   );
 }

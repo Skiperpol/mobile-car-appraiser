@@ -1,6 +1,6 @@
+import { SettingsFooter } from "@/components/settings/Footer";
 import Header from "@/components/settings/Header";
 import { SettingsAboutSection } from "@/components/settings/SettingsAboutSection";
-import { SettingsAccountSection } from "@/components/settings/SettingsAccountSection";
 import { SettingsGeneralSection } from "@/components/settings/SettingsGeneralSection";
 import { SettingsSyncSection } from "@/components/settings/SettingsSyncSection";
 import { ScrollView, View } from "react-native";
@@ -16,8 +16,8 @@ export default function SettingsScreen() {
         <SettingsGeneralSection />
         <SettingsSyncSection />
         <SettingsAboutSection />
-        <SettingsAccountSection />
       </ScrollView>
+      <SettingsFooter />
     </View>
   );
 }
