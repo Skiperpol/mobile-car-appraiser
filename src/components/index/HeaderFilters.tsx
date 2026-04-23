@@ -19,9 +19,6 @@ export function HeaderFilters() {
   return (
     <View className="flex-row gap-3">
       <View className="flex-1" onLayout={sortWidth.onLayout}>
-        {/* <Text className="ml-1 text-xs font-extrabold text-zinc-500 uppercase">
-          Sortowanie
-        </Text> */}
         <Select
           value={sort ?? undefined}
           onValueChange={(option) => option && setSort(option)}
