@@ -30,9 +30,9 @@ export function FormField({
 
   return (
     <View className="mb-4">
-      <Text className="mb-2 text-[16px] text-zinc-700">{label}</Text>
+      <Text className="mb-2 text-[16px] text-black">{label}</Text>
       <Input
-        className="h-12 border-zinc-200 bg-zinc-50 px-4 text-lg"
+        className="border-zinc-200 bg-zinc-50 px-4 text-lg "
         placeholderTextColor="#a1a1aa"
         {...props}
       />

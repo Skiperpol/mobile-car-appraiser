@@ -20,7 +20,7 @@ export function StepVehicleForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Numer raportu*"
-            placeholder="Wprowadz numer"
+            placeholder="RAP-2026-001"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.vehicle?.reportNumber?.message}
@@ -33,7 +33,7 @@ export function StepVehicleForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Marka"
-            placeholder="Wprowadz marke"
+            placeholder="Toyota"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.vehicle?.make?.message}
@@ -46,7 +46,7 @@ export function StepVehicleForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Model"
-            placeholder="Wprowadz model"
+            placeholder="Corolla"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.vehicle?.model?.message}
@@ -59,7 +59,7 @@ export function StepVehicleForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="VIN"
-            placeholder="Wprowadz numer VIN"
+            placeholder="WAUZZZ8V0JA000001"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.vehicle?.vin?.message}
@@ -72,7 +72,7 @@ export function StepVehicleForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Numer rejestracyjny"
-            placeholder="Wprowadz numer rejestracyjny"
+            placeholder="WI 1234A"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.vehicle?.registrationNumber?.message}
@@ -85,7 +85,7 @@ export function StepVehicleForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Rok produkcji"
-            placeholder="Wprowadz rok"
+            placeholder="2019"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.vehicle?.productionYear?.message}

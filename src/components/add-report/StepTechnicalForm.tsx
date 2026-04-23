@@ -20,7 +20,7 @@ export function StepTechnicalForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Wskazanie drogomierza"
-            placeholder="np. 53235 km"
+            placeholder="53235 km"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.technical?.odometer?.message}
@@ -33,7 +33,7 @@ export function StepTechnicalForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Okres eksploatacji pojazdu"
-            placeholder="np. 77 miesiecy"
+            placeholder="77 miesiecy"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.technical?.usageMonths?.message}
@@ -46,7 +46,7 @@ export function StepTechnicalForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Dopuszczalna masa calkowita"
-            placeholder="np. 2375 kg"
+            placeholder="2375 kg"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.technical?.maxWeight?.message}
@@ -59,7 +59,7 @@ export function StepTechnicalForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Rodzaj nadwozia"
-            placeholder="Wprowadz rodzaj"
+            placeholder="SUV"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.technical?.bodyType?.message}
@@ -72,7 +72,7 @@ export function StepTechnicalForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Jednostka napedowa"
-            placeholder="Wprowadz jednostke"
+            placeholder="Silnik benzynowy"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.technical?.driveUnit?.message}
@@ -85,7 +85,7 @@ export function StepTechnicalForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Pojemnosc silnika"
-            placeholder="np. 1998 cm3"
+            placeholder="1998 cm3"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.technical?.engineCapacity?.message}
@@ -98,7 +98,7 @@ export function StepTechnicalForm() {
         render={({ field: { value, onChange } }) => (
           <FormField
             label="Moc silnika"
-            placeholder="np. 150 KM"
+            placeholder="150 KM"
             value={value}
             onChangeText={onChange}
             errorMessage={errors.technical?.enginePower?.message}
