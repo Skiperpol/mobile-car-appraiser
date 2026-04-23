@@ -24,8 +24,6 @@ export function CreateOrderModal({
   onDescriptionChange,
   onCreate,
 }: CreateOrderModalProps) {
-  const placeholderColor = "#71717a";
-
   return (
     <Modal
       transparent
@@ -51,14 +49,12 @@ export function CreateOrderModal({
             <FormField
               label="Nazwa zlecenia*"
               placeholder="Wypadek - ul. Glowna 123"
-              placeholderTextColor={placeholderColor}
               value={newOrderName}
               onChangeText={onNameChange}
             />
             <FormField
               label="Opis"
               placeholder="Dodatkowy opis zlecenia"
-              placeholderTextColor={placeholderColor}
               value={newOrderDescription}
               onChangeText={onDescriptionChange}
               multiline
