@@ -9,9 +9,7 @@ export default function Footer() {
     <FooterComponent>
       <Button variant="main" onPress={() => router.push("./add-report")}>
         <Plus size={20} color="#ffffff" />
-        <Text variant="main" className="mr-1 ">
-          Nowy raport
-        </Text>
+        <Text>Nowy raport</Text>
       </Button>
     </FooterComponent>
   );
