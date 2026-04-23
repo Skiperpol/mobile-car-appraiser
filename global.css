@@ -30,7 +30,7 @@
     --chart-5: 27 87% 67%;
     --main-radius: 0.625rem;
     --secondary-radius: 0.375rem;
-    --base-height: 3rem;
+    --base-height: 3.5rem;
   }
 
   .dark:root {
