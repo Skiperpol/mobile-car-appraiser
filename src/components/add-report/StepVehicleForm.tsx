@@ -19,7 +19,7 @@ export function StepVehicleForm() {
         name="vehicle.reportNumber"
         render={({ field: { value, onChange } }) => (
           <FormField
-            label="Numer raportu"
+            label="Numer raportu*"
             placeholder="Wprowadz numer"
             value={value}
             onChangeText={onChange}

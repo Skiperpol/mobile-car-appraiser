@@ -88,10 +88,10 @@ export function useAddReportForm() {
 
   const goNext = async () => {
     if (step === 1) {
-      // const isValid = await trigger("selectedOrderId");
-      // if (!isValid) {
-      //   return;
-      // }
+      const isValid = await trigger("selectedOrderId");
+      if (!isValid) {
+        return;
+      }
       setStep(2);
       return;
     }
@@ -105,8 +105,14 @@ export function useAddReportForm() {
       return;
     }
 
-    void handleSubmit(() => {
-      router.back();
+    void handleSubmit((values) => {
+      router.replace({
+        pathname: "./report-details",
+        params: {
+          reportId: values.selectedOrderId ?? "WYP-2024-003",
+          reportNumber: values.vehicle.reportNumber,
+        },
+      });
     })();
   };
 

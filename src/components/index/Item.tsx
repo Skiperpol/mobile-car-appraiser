@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { CircleCheck, Clock3, ImageIcon } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 
@@ -15,6 +16,12 @@ export default function Item({ report }: { report: Report }) {
     <Pressable
       key={report.id}
       className="rounded-md border border-zinc-300 bg-white p-3"
+      onPress={() =>
+        router.push({
+          pathname: "./report-details",
+          params: { reportId: report.id },
+        })
+      }
     >
       <View className="flex-row">
         <View
