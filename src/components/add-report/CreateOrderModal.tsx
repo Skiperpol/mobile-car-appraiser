@@ -24,6 +24,8 @@ export function CreateOrderModal({
   onDescriptionChange,
   onCreate,
 }: CreateOrderModalProps) {
+  const placeholderColor = "#71717a";
+
   return (
     <Modal
       transparent
@@ -40,36 +42,34 @@ export function CreateOrderModal({
             style={styles.sheet}
           >
             <View className="mb-5 flex-row items-center justify-between">
-              <Text className="text-4xl font-bold text-zinc-900">
-                Nowe zlecenie
-              </Text>
+              <Text variant="main">Nowe zlecenie</Text>
               <Pressable onPress={onClose} className="p-1">
                 <X size={20} color="#52525b" />
               </Pressable>
             </View>
 
             <FormField
-              label="Nazwa zlecenia *"
-              placeholder="np. Wypadek - ul. Glowna 123"
+              label="Nazwa zlecenia*"
+              placeholder="Wypadek - ul. Glowna 123"
+              placeholderTextColor={placeholderColor}
               value={newOrderName}
               onChangeText={onNameChange}
             />
             <FormField
               label="Opis"
               placeholder="Dodatkowy opis zlecenia"
+              placeholderTextColor={placeholderColor}
               value={newOrderDescription}
               onChangeText={onDescriptionChange}
               multiline
             />
 
             <Button
-              className="mt-2 h-12"
+              variant="main"
               onPress={onCreate}
               disabled={!newOrderName.trim()}
             >
-              <Text className="text-lg font-semibold text-white">
-                Utworz zlecenie
-              </Text>
+              <Text>Utworz zlecenie</Text>
             </Button>
           </Animated.View>
         </View>
