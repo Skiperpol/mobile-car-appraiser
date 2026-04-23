@@ -15,6 +15,7 @@ export default function TabLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="settings" />
           <Stack.Screen name="add-report" />
+          <Stack.Screen name="report-details" />
         </Stack>
       </SafeAreaView>
     </SafeAreaProvider>
