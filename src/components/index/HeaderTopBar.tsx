@@ -7,7 +7,7 @@ import { Text } from "../ui/text";
 
 export function HeaderTopBar() {
   return (
-    <View className="mb-4 flex-row items-center justify-between">
+    <View className="flex-row items-center justify-between">
       <Text className="text-2xl font-extrabold text-zinc-900">Raporty</Text>
       <View className="flex-row gap-2">
         <Button variant="outline" size="icon">

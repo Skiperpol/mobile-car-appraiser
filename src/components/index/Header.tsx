@@ -1,15 +1,15 @@
 import React from "react";
-import { View } from "react-native";
+import HeaderComponent from "../HeaderComponent";
 import { HeaderFilters } from "./HeaderFilters";
 import { HeaderSearch } from "./HeaderSearch";
 import { HeaderTopBar } from "./HeaderTopBar";
 
 export default function Header() {
   return (
-    <View className="p-4 bg-white">
+    <HeaderComponent>
       <HeaderTopBar />
       <HeaderSearch />
       <HeaderFilters />
-    </View>
+    </HeaderComponent>
   );
 }
