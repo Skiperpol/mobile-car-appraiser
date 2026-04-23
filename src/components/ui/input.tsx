@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
 import { useThemePreference } from "@/hooks/useThemePreference";
 import { THEME } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 import { Platform, TextInput } from "react-native";
 
 function Input({
@@ -14,7 +14,7 @@ function Input({
     <TextInput
       placeholderTextColor={placeholderTextColor ?? THEME[mode].placeholder}
       className={cn(
-        "dark:bg-input/30 border-input bg-background text-foreground flex h-base w-full min-w-0 flex-row items-center rounded-main border px-3 py-1 text-base leading-5 shadow-sm shadow-black/5 sm:h-9",
+        "dark:bg-input/30 border-input bg-white text-foreground flex h-base w-full min-w-0 flex-row items-center rounded-main border px-3 py-1 text-base leading-5 shadow-sm shadow-black/5 sm:h-9",
         props.editable === false &&
           cn(
             "opacity-50",

@@ -22,7 +22,7 @@ export function FormField({
         <TextInput
           multiline
           textAlignVertical="top"
-          className="h-24 w-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-lg text-zinc-900 rounded-main"
+          className="h-24 w-full border border-zinc-200 px-4 py-3 text-lg text-zinc-900 rounded-main"
           placeholderTextColor={placeholderTextColor ?? THEME[mode].placeholder}
           {...props}
         />
@@ -37,7 +37,7 @@ export function FormField({
     <View className="mb-4">
       <Text className="mb-2 text-[16px] text-black">{label}</Text>
       <Input
-        className="border-zinc-200 bg-zinc-50 px-4 text-lg "
+        className="border-zinc-200 px-4 text-lg "
         placeholderTextColor={placeholderTextColor ?? THEME[mode].placeholder}
         {...props}
       />

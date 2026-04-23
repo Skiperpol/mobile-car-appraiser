@@ -112,7 +112,7 @@ function Button({ className, variant, size, ...props }: ButtonProps) {
     <TextClassContext.Provider value={buttonTextVariants({ variant, size })}>
       <Pressable
         className={cn(
-          props.disabled && "opacity-50",
+          props.disabled && "opacity-75",
           buttonVariants({ variant, size }),
           className,
         )}

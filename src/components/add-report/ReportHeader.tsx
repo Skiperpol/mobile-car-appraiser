@@ -13,7 +13,7 @@ function StepProgress({ step }: { step: ReportStep }) {
         return (
           <View
             key={item}
-            className={`h-1 flex-1 rounded-full ${active ? "bg-zinc-900" : "bg-zinc-300"}`}
+            className={`h-2 flex-1 rounded-main ${active ? "bg-zinc-900" : "bg-zinc-300"}`}
           />
         );
       })}
