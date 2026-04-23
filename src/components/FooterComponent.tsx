@@ -6,6 +6,8 @@ export default function FooterComponent({
   children: React.ReactNode;
 }) {
   return (
-    <View className="border-t border-zinc-200 bg-white p-4">{children}</View>
+    <View className="border-t border-zinc-200 bg-white p-4 flex flex-col gap-4">
+      {children}
+    </View>
   );
 }
