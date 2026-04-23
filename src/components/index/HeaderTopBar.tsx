@@ -8,7 +8,7 @@ import { Text } from "../ui/text";
 export function HeaderTopBar() {
   return (
     <View className="flex-row items-center justify-between">
-      <Text className="text-2xl font-extrabold text-zinc-900">Raporty</Text>
+      <Text variant="main">Raporty</Text>
       <View className="flex-row gap-2">
         <Button variant="outline" size="icon">
           <RefreshCw size={18} color="#374151" />

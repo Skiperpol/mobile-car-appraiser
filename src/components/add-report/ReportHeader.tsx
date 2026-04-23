@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { ArrowLeft } from "lucide-react-native";
 import { View } from "react-native";
+import HeaderComponent from "../HeaderComponent";
 import { type ReportStep } from "./types";
 
 function StepProgress({ step }: { step: ReportStep }) {
   return (
-    <View className="my-2 flex-row gap-2 px-2">
+    <View className="flex-row gap-2 px-2">
       {[1, 2, 3].map((item) => {
         const active = item <= step;
         return (
@@ -28,19 +29,14 @@ export function ReportHeader({
   onBack: () => void;
 }) {
   return (
-    <View className="border-b border-zinc-200 bg-white px-4 pb-3 pt-4">
+    <HeaderComponent>
       <View className="flex-row items-center gap-2 h-10">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 rounded-full"
-          onPress={onBack}
-        >
+        <Button variant="ghost" size="icon" onPress={onBack}>
           <ArrowLeft size={18} color="#111827" />
         </Button>
-        <Text className="text-2xl font-bold text-zinc-900">Nowy raport</Text>
+        <Text variant="main">Nowy raport</Text>
       </View>
       <StepProgress step={step} />
-    </View>
+    </HeaderComponent>
   );
 }
