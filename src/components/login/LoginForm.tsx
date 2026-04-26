@@ -3,9 +3,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { router } from "expo-router";
-import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
+import { PasswordInput } from "./PasswordInput";
 
 type LoginFormProps = {
   rememberMe: boolean;
@@ -17,7 +17,7 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
 
   return (
     <View className="-mt-8 rounded-t-3xl bg-white p-4">
-      <Text className="text-center text-3xl font-extrabold text-zinc-900 pt-2">
+      <Text className="text-center text-3xl font-extrabold text-main pt-2">
         Panel autoryzacyjny
       </Text>
 
@@ -28,34 +28,16 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
             placeholder="jan.kowalski@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="px-4 text-main"
+            className=""
           />
         </View>
 
         <View className="gap-1">
           <Text className="text-sm font-semibold text-input">Hasło</Text>
-          <View className="relative">
-            <Input
-              placeholder={isPasswordVisible ? "Hasło" : "•••••"}
-              secureTextEntry={!isPasswordVisible}
-              className="px-4 pr-12 text-main"
-            />
-            <Pressable
-              onPress={() => setIsPasswordVisible((prev) => !prev)}
-              className="absolute right-4 top-1/2 -translate-y-1/2"
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel={
-                isPasswordVisible ? "Ukryj hasło" : "Pokaż hasło"
-              }
-            >
-              {isPasswordVisible ? (
-                <EyeOff size={18} color="#71717a" />
-              ) : (
-                <Eye size={18} color="#71717a" />
-              )}
-            </Pressable>
-          </View>
+          <PasswordInput
+            isPasswordVisible={isPasswordVisible}
+            setIsPasswordVisible={setIsPasswordVisible}
+          />
         </View>
 
         <Pressable
