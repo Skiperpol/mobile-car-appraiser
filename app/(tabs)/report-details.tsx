@@ -11,7 +11,10 @@ import { useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 export default function ReportDetailsScreen() {
-  const params = useLocalSearchParams<{ reportId?: string; reportNumber?: string }>();
+  const params = useLocalSearchParams<{
+    reportId?: string;
+    reportNumber?: string;
+  }>();
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
   const [isPhotoModalOpen, setPhotoModalOpen] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<ReportPhoto | null>(null);
@@ -39,14 +42,16 @@ export default function ReportDetailsScreen() {
     setLocalPhotos((prev) => {
       const source = prev ?? baseDetails.photos;
       return source.map((item) =>
-        item.id === selectedPhoto.id ? { ...item, comment: photoComment.trim() } : item,
+        item.id === selectedPhoto.id
+          ? { ...item, comment: photoComment.trim() }
+          : item,
       );
     });
     setPhotoModalOpen(false);
   };
 
   return (
-    <View className="flex-1 bg-zinc-100">
+    <View className="flex-1">
       <ReportDetailsHeader title={baseDetails.carName} />
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
