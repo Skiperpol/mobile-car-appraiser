@@ -15,7 +15,7 @@ export default function Item({ report }: { report: Report }) {
   return (
     <Pressable
       key={report.id}
-      className="rounded-md border border-zinc-300 bg-white p-3"
+      className="rounded-main border border-zinc-300 bg-white p-3"
       onPress={() =>
         router.push({
           pathname: "./report-details",
