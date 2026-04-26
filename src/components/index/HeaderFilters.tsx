@@ -24,7 +24,10 @@ export function HeaderFilters() {
           onValueChange={(option) => option && setSort(option)}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Wybierz sortowanie" />
+            <SelectValue
+              placeholder="Wybierz sortowanie"
+              className="text-placeholder"
+            />
           </SelectTrigger>
           <SelectContent style={sortWidth.style}>
             <SelectItem value="date" label="Wedlug daty">
@@ -45,7 +48,10 @@ export function HeaderFilters() {
           onValueChange={(option) => option && setStatus(option)}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Wybierz status" />
+            <SelectValue
+              placeholder="Wybierz status"
+              className="text-placeholder"
+            />
           </SelectTrigger>
           <SelectContent style={statusWidth.style}>
             <SelectItem value="all" label="Wszystkie">
