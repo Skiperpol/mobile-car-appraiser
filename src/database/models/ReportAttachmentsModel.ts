@@ -13,6 +13,7 @@ export interface IReportAttachments {
   reportId: string;
   url: string;
   comment: string | null;
+  name: string;
 }
 
 export default class ReportAttachmentsModel extends Model {
@@ -27,6 +28,7 @@ export default class ReportAttachmentsModel extends Model {
 
   @text("url") url!: string;
   @text("comment") comment!: string | null;
+  @text("name") name!: string;
 
   @readonly @date("created_at") createdAt!: Date;
   @readonly @date("updated_at") updatedAt!: Date;

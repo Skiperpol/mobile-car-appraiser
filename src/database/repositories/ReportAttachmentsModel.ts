@@ -35,6 +35,7 @@ class ReportAttachmentsRepository {
         reportAttachments.reportId = data.reportId;
         reportAttachments.url = data.url;
         reportAttachments.comment = data.comment;
+        reportAttachments.name = data.name;
       });
     });
   }
@@ -47,6 +48,7 @@ class ReportAttachmentsRepository {
           if (data.url) reportAttachments.url = data.url;
           if (data.comment) reportAttachments.comment = data.comment;
           if (data.reportId) reportAttachments.reportId = data.reportId;
+          if (data.name) reportAttachments.name = data.name;
         });
       } catch (e) {
         console.warn(`Record ${id} not found, skipping update`);
