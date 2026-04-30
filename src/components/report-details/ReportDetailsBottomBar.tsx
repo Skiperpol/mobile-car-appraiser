@@ -4,7 +4,7 @@ import { Camera, Download, Mail } from "lucide-react-native";
 import { View } from "react-native";
 import FooterComponent from "../FooterComponent";
 
-export function ReportDetailsBottomBar() {
+export function ReportDetailsBottomBar({ onAddPhoto }: { onAddPhoto: () => void }) {
   return (
     <FooterComponent>
       <View className="flex-row items-center gap-3">
@@ -12,7 +12,7 @@ export function ReportDetailsBottomBar() {
           <Download size={18} color="#374151" />
         </Button>
 
-        <Button variant="main" className="flex-1">
+        <Button variant="main" className="flex-1" onPress={onAddPhoto}>
           <Camera size={18} color="#ffffff" />
           <Text>Dodaj zdjecie</Text>
         </Button>

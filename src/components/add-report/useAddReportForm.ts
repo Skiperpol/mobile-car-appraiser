@@ -8,6 +8,9 @@ import {
   type Order,
   type ReportStep,
 } from "@/components/add-report/types";
+import basicDataRepository from "@/database/repositories/BasicDataRepository";
+import reportDynamicValueRepository from "@/database/repositories/ReportDynamicValueModel";
+import reportRepository from "@/database/repositories/ReportRepository";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
@@ -36,7 +39,7 @@ export function useAddReportForm() {
     formState: { errors },
   } = form;
 
-  const selectedOrderId = watch("selectedOrderId");
+  const selectedOrderId = watch("selectedOrderId") ?? "";
 
   const filteredOrders = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
@@ -105,11 +108,45 @@ export function useAddReportForm() {
       return;
     }
 
-    void handleSubmit((values) => {
+    void handleSubmit(async (values) => {
+      const createdReport = await reportRepository.createReport({
+        userId: "local-user",
+        orderId: values.selectedOrderId ?? null,
+        reportNumber: values.vehicle.reportNumber,
+        imageUrl: null,
+        imageName: null,
+      });
+
+      await basicDataRepository.createBasicData({
+        reportId: createdReport.id,
+        brand: values.vehicle.make?.trim() || null,
+        model: values.vehicle.model?.trim() || null,
+        vin: values.vehicle.vin?.trim() || null,
+        registrationNumber: values.vehicle.registrationNumber?.trim() || null,
+        productionYear: values.vehicle.productionYear
+          ? Number.isFinite(Number(values.vehicle.productionYear))
+            ? Number(values.vehicle.productionYear)
+            : null
+          : null,
+      });
+
+      const dynamicEntries = Object.entries(values.technical).filter(
+        ([, value]) => value?.trim(),
+      );
+      await Promise.all(
+        dynamicEntries.map(([fieldId, value]) =>
+          reportDynamicValueRepository.createReportDynamicValue({
+            reportId: createdReport.id,
+            fieldId,
+            value: value!.trim(),
+          }),
+        ),
+      );
+
       router.replace({
         pathname: "./report-details",
         params: {
-          reportId: values.selectedOrderId ?? "WYP-2024-003",
+          reportId: createdReport.id,
           reportNumber: values.vehicle.reportNumber,
         },
       });

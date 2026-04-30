@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { X } from "lucide-react-native";
-import { Modal, Pressable, View } from "react-native";
+import { Image, Modal, Pressable, View } from "react-native";
 import { type ReportPhoto } from "./types";
 
 export function PhotoCommentModal({
@@ -33,7 +33,11 @@ export function PhotoCommentModal({
           </View>
 
           <View className="mb-4 h-80 items-center justify-center rounded-xl bg-slate-900">
-            <Text className="text-5xl text-white">Mercedes C-Class</Text>
+            {photo?.uri ? (
+              <Image source={{ uri: photo.uri }} className="h-full w-full rounded-xl" resizeMode="cover" />
+            ) : (
+              <Text className="text-2xl text-white">Brak podgladu zdjecia</Text>
+            )}
           </View>
 
           <Text className="mb-2 text-2xl text-zinc-700">Komentarz</Text>

@@ -1,6 +1,6 @@
 import { Text } from "@/components/ui/text";
 import { CheckCircle2, GripVertical } from "lucide-react-native";
-import { Pressable, View } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import { type ReportPhoto } from "./types";
 
 function PhotoTile({
@@ -20,8 +20,12 @@ function PhotoTile({
             <GripVertical size={13} color="#ffffff" />
           </View>
         </View>
-        <View className="h-24 items-center justify-center">
-          <Text className="text-lg text-white">Mercedes C-Class</Text>
+        <View className="h-24 items-center justify-center overflow-hidden rounded-lg bg-slate-800">
+          {photo.uri ? (
+            <Image source={{ uri: photo.uri }} className="h-full w-full" resizeMode="cover" />
+          ) : (
+            <Text className="text-lg text-white">Brak podgladu</Text>
+          )}
         </View>
       </View>
       <Text className="text-base text-zinc-600">{photo.title}</Text>

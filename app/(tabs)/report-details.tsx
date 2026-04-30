@@ -4,10 +4,10 @@ import { ReportDetailsBottomBar } from "@/components/report-details/ReportDetail
 import { ReportDetailsHeader } from "@/components/report-details/ReportDetailsHeader";
 import { ReportInfoCard } from "@/components/report-details/ReportInfoCard";
 import { ReportInfoModal } from "@/components/report-details/ReportInfoModal";
-import { getReportDetails } from "@/components/report-details/mockData";
 import { type ReportPhoto } from "@/components/report-details/types";
+import { useReportDetailsViewModel } from "@/viewmodels/reports/useReportDetailsViewModel";
 import { useLocalSearchParams } from "expo-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ScrollView, View } from "react-native";
 
 export default function ReportDetailsScreen() {
@@ -19,14 +19,10 @@ export default function ReportDetailsScreen() {
   const [isPhotoModalOpen, setPhotoModalOpen] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<ReportPhoto | null>(null);
   const [photoComment, setPhotoComment] = useState("");
-  const [localPhotos, setLocalPhotos] = useState<ReportPhoto[] | null>(null);
+  const vm = useReportDetailsViewModel(params.reportId);
 
-  const baseDetails = useMemo(
-    () => getReportDetails(params.reportId, params.reportNumber),
-    [params.reportId, params.reportNumber],
-  );
-
-  const photos = localPhotos ?? baseDetails.photos;
+  const details = vm.details;
+  const photos = details?.photos ?? [];
 
   const handleOpenPhoto = (photo: ReportPhoto) => {
     setSelectedPhoto(photo);
@@ -38,43 +34,35 @@ export default function ReportDetailsScreen() {
     if (!selectedPhoto) {
       return;
     }
-
-    setLocalPhotos((prev) => {
-      const source = prev ?? baseDetails.photos;
-      return source.map((item) =>
-        item.id === selectedPhoto.id
-          ? { ...item, comment: photoComment.trim() }
-          : item,
-      );
-    });
+    void vm.savePhotoComment(selectedPhoto.id, photoComment.trim());
     setPhotoModalOpen(false);
   };
 
   return (
     <View className="flex-1">
-      <ReportDetailsHeader title={baseDetails.carName} />
+      <ReportDetailsHeader title={details?.carName ?? "Raport"} />
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
         <ReportInfoCard onPress={() => setInfoModalOpen(true)} />
         <PhotosGridCard
           photos={photos}
           onPhotoPress={handleOpenPhoto}
-          statusLabel={baseDetails.statusLabel}
+          statusLabel={details?.statusLabel ?? "Brak danych"}
         />
       </ScrollView>
 
-      <ReportDetailsBottomBar />
+      <ReportDetailsBottomBar onAddPhoto={() => void vm.addPhoto()} />
 
       <ReportInfoModal
         visible={isInfoModalOpen}
         onClose={() => setInfoModalOpen(false)}
         data={{
-          assignedOrderId: baseDetails.assignedOrderId,
-          reportNumber: baseDetails.reportNumber,
-          make: baseDetails.make,
-          model: baseDetails.model,
-          vin: baseDetails.vin,
-          registrationNumber: baseDetails.registrationNumber,
+          assignedOrderId: details?.assignedOrderId ?? "-",
+          reportNumber: details?.reportNumber ?? params.reportNumber ?? "-",
+          make: details?.make ?? "-",
+          model: details?.model ?? "-",
+          vin: details?.vin ?? "-",
+          registrationNumber: details?.registrationNumber ?? "-",
         }}
       />
 
