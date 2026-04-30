@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { View } from "react-native";
 import { useMeasuredWidth } from "../../hooks/useMeasuredWidth";
 import {
@@ -9,19 +8,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-export function HeaderFilters() {
+export function HeaderFilters({
+  sort,
+  status,
+  sortOptions,
+  statusOptions,
+  onSortChange,
+  onStatusChange,
+}: {
+  sort: Option | null;
+  status: Option | null;
+  sortOptions: Option[];
+  statusOptions: Option[];
+  onSortChange: (option: Option | null) => void;
+  onStatusChange: (option: Option | null) => void;
+}) {
   const sortWidth = useMeasuredWidth();
   const statusWidth = useMeasuredWidth();
-
-  const [sort, setSort] = useState<Option | null>(null);
-  const [status, setStatus] = useState<Option | null>(null);
 
   return (
     <View className="flex-row gap-3">
       <View className="flex-1" onLayout={sortWidth.onLayout}>
         <Select
           value={sort ?? undefined}
-          onValueChange={(option) => option && setSort(option)}
+          onValueChange={onSortChange}
         >
           <SelectTrigger className="w-full">
             <SelectValue
@@ -30,12 +40,15 @@ export function HeaderFilters() {
             />
           </SelectTrigger>
           <SelectContent style={sortWidth.style}>
-            <SelectItem value="date" label="Wedlug daty">
-              Wedlug daty
-            </SelectItem>
-            <SelectItem value="name" label="Według nazwy">
-              Według nazwy
-            </SelectItem>
+            {sortOptions.map((option, index) => (
+              <SelectItem
+                key={option?.value ?? String(index)}
+                value={option?.value ?? ""}
+                label={option?.label ?? ""}
+              >
+                {option?.label ?? ""}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </View>
@@ -45,7 +58,7 @@ export function HeaderFilters() {
         </Text> */}
         <Select
           value={status ?? undefined}
-          onValueChange={(option) => option && setStatus(option)}
+          onValueChange={onStatusChange}
         >
           <SelectTrigger className="w-full">
             <SelectValue
@@ -54,18 +67,15 @@ export function HeaderFilters() {
             />
           </SelectTrigger>
           <SelectContent style={statusWidth.style}>
-            <SelectItem value="all" label="Wszystkie">
-              Wszystkie
-            </SelectItem>
-            <SelectItem value="synced" label="Wgrane">
-              Wgrane
-            </SelectItem>
-            <SelectItem value="not-synced" label="Oczekujące">
-              Oczekujące
-            </SelectItem>
-            <SelectItem value="with-errors" label="Z błędami">
-              Z błędami
-            </SelectItem>
+            {statusOptions.map((option, index) => (
+              <SelectItem
+                key={option?.value ?? String(index)}
+                value={option?.value ?? ""}
+                label={option?.label ?? ""}
+              >
+                {option?.label ?? ""}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </View>

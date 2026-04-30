@@ -1,14 +1,17 @@
-import React, { useState } from "react";
 import { SearchComponent } from "../SearchComponent";
 
-export function HeaderSearch() {
-  const [searchValue, setSearchValue] = useState("");
-
+export function HeaderSearch({
+  searchValue,
+  onSearchChange,
+}: {
+  searchValue: string;
+  onSearchChange: (value: string) => void;
+}) {
   return (
     <SearchComponent
       placeholder="Szukaj raportów..."
       value={searchValue}
-      onChangeText={setSearchValue}
+      onChangeText={onSearchChange}
     />
   );
 }
