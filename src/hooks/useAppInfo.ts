@@ -16,8 +16,6 @@ function formatPolishDate(date: Date) {
 export function useAppInfo(): AppInfo {
   const version = Constants.expoConfig?.version ?? "Brak danych";
 
-  // Prefer explicit app metadata from app config.
-  // Example in app.json/app.config.ts: extra.lastUpdateAt = "2026-03-19"
   const lastUpdateAt = Constants.expoConfig?.extra?.lastUpdateAt as
     | string
     | undefined;
