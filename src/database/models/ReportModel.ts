@@ -9,6 +9,8 @@ export interface IReport {
   userId: string;
   orderId: string | null;
   reportNumber: string;
+  imageUrl: string | null;
+  imageName: string | null;
 }
 
 export default class ReportModel extends Model {
@@ -23,6 +25,8 @@ export default class ReportModel extends Model {
   @text("user_id") userId!: string;
   @text("order_id") orderId!: string | null;
   @text("report_number") reportNumber!: string;
+  @text("image_url") imageUrl!: string | null;
+  @text("image_name") imageName!: string | null;
 
   @children("basic_data") basicData!: Query<BasicDataModel>;
   @children("report_dynamic_values")

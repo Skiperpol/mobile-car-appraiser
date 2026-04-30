@@ -31,6 +31,8 @@ class ReportRepository {
         report.userId = data.userId;
         report.orderId = data.orderId;
         report.reportNumber = data.reportNumber;
+        report.imageUrl = data.imageUrl;
+        report.imageName = data.imageName;
       });
     });
   }
@@ -43,6 +45,8 @@ class ReportRepository {
           if (data.userId) report.userId = data.userId;
           if (data.reportNumber) report.reportNumber = data.reportNumber;
           if (data.orderId !== undefined) report.orderId = data.orderId;
+          if (data.imageUrl) report.imageUrl = data.imageUrl;
+          if (data.imageName) report.imageName = data.imageName;
         });
       } catch (e) {
         console.warn(`Record ${id} not found, skipping update`);
