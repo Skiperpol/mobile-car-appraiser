@@ -1,16 +1,8 @@
+import { FormField } from "@/components/add-report/FormField";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { ScanLine, X } from "lucide-react-native";
 import { Modal, Pressable, ScrollView, View } from "react-native";
-
-function Field({ label, value }: { label: string; value: string }) {
-  return (
-    <View className="mb-3 rounded-xl bg-zinc-100 p-3">
-      <Text className="text-sm text-zinc-500">{label}</Text>
-      <Text className="mt-1 text-2xl text-zinc-900">{value}</Text>
-    </View>
-  );
-}
 
 export function ReportInfoModal({
   visible,
@@ -49,15 +41,23 @@ export function ReportInfoModal({
             </Button>
 
             <Text className="mb-2 text-base font-bold text-zinc-600">ZLECENIE</Text>
-            <Field label="Przypisane zlecenie" value={data.assignedOrderId} />
+            <FormField
+              label="Przypisane zlecenie"
+              value={data.assignedOrderId}
+              editable={false}
+            />
 
             <View className="my-3 h-px bg-zinc-200" />
             <Text className="mb-2 text-base font-bold text-zinc-600">PODSTAWOWE DANE</Text>
-            <Field label="Numer raportu" value={data.reportNumber} />
-            <Field label="Marka" value={data.make} />
-            <Field label="Model" value={data.model} />
-            <Field label="VIN" value={data.vin} />
-            <Field label="Numer rejestracyjny" value={data.registrationNumber} />
+            <FormField label="Numer raportu" value={data.reportNumber} editable={false} />
+            <FormField label="Marka" value={data.make} editable={false} />
+            <FormField label="Model" value={data.model} editable={false} />
+            <FormField label="VIN" value={data.vin} editable={false} />
+            <FormField
+              label="Numer rejestracyjny"
+              value={data.registrationNumber}
+              editable={false}
+            />
           </ScrollView>
         </View>
       </View>
