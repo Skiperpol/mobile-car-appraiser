@@ -1,7 +1,7 @@
 import ReportAttachmentsModel, {
   IReportAttachments,
 } from "@/database/models/ReportAttachmentsModel";
-import { Database } from "@nozbe/watermelondb";
+import { Database, Q } from "@nozbe/watermelondb";
 import { database } from "..";
 
 class ReportAttachmentsRepository {
@@ -27,6 +27,12 @@ class ReportAttachmentsRepository {
     } catch (error) {
       return null;
     }
+  }
+
+  async getByReportId(reportId: string): Promise<ReportAttachmentsModel[]> {
+    return await this.reportAttachments
+      .query(Q.where("report_id", reportId), Q.sortBy("created_at", Q.asc))
+      .fetch();
   }
 
   async createReportAttachments(data: IReportAttachments) {

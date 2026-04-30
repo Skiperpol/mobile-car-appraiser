@@ -1,7 +1,7 @@
 import ReportDynamicValueModel, {
   IReportDynamicValue,
 } from "@/database/models/ReportDynamicValueModel";
-import { Database } from "@nozbe/watermelondb";
+import { Database, Q } from "@nozbe/watermelondb";
 import { database } from "..";
 
 class ReportDynamicValueRepository {
@@ -27,6 +27,12 @@ class ReportDynamicValueRepository {
     } catch (error) {
       return null;
     }
+  }
+
+  async getByReportId(reportId: string): Promise<ReportDynamicValueModel[]> {
+    return await this.reportDynamicValues
+      .query(Q.where("report_id", reportId), Q.sortBy("created_at", Q.asc))
+      .fetch();
   }
 
   async createReportDynamicValue(data: IReportDynamicValue) {

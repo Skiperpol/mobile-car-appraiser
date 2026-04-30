@@ -1,7 +1,7 @@
 import BasicDataModel, {
   IBasicData,
 } from "@/database/models/BasicDataModel";
-import { Database } from "@nozbe/watermelondb";
+import { Database, Q } from "@nozbe/watermelondb";
 import { database } from "..";
 
 class BasicDataRepository {
@@ -25,6 +25,13 @@ class BasicDataRepository {
     } catch (error) {
       return null;
     }
+  }
+
+  async getByReportId(reportId: string): Promise<BasicDataModel | null> {
+    const records = await this.basicData
+      .query(Q.where("report_id", reportId), Q.take(1))
+      .fetch();
+    return records[0] ?? null;
   }
 
   async createBasicData(data: IBasicData) {

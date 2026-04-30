@@ -1,6 +1,9 @@
 import ReportModel, { IReport } from "@/database/models/ReportModel";
-import { Database } from "@nozbe/watermelondb";
+import { Database, Q } from "@nozbe/watermelondb";
 import { database } from "..";
+
+export type ReportSortBy = "createdAtDesc" | "createdAtAsc" | "reportNumberAsc";
+export type ReportStatusFilter = "all" | "withPhoto" | "withoutPhoto";
 
 class ReportRepository {
   private db: Database;
@@ -15,6 +18,48 @@ class ReportRepository {
 
   async getAll(): Promise<ReportModel[]> {
     return await this.reports.query().fetch();
+  }
+
+  async queryReports(filters: {
+    search?: string;
+    sortBy?: ReportSortBy;
+    status?: ReportStatusFilter;
+  }): Promise<ReportModel[]> {
+    const clauses = [];
+    const search = filters.search?.trim();
+    const sortBy = filters.sortBy ?? "createdAtDesc";
+    const status = filters.status ?? "all";
+
+    if (search) {
+      clauses.push(
+        Q.or(
+          Q.where("report_number", Q.like(`%${Q.sanitizeLikeString(search)}%`)),
+          Q.where("order_id", Q.like(`%${Q.sanitizeLikeString(search)}%`)),
+        ),
+      );
+    }
+
+    if (status === "withPhoto") {
+      clauses.push(Q.where("image_name", Q.notEq(null)));
+    }
+
+    if (status === "withoutPhoto") {
+      clauses.push(Q.where("image_name", Q.eq(null)));
+    }
+
+    if (sortBy === "createdAtAsc") {
+      clauses.push(Q.sortBy("created_at", Q.asc));
+    }
+
+    if (sortBy === "reportNumberAsc") {
+      clauses.push(Q.sortBy("report_number", Q.asc));
+    }
+
+    if (sortBy === "createdAtDesc") {
+      clauses.push(Q.sortBy("created_at", Q.desc));
+    }
+
+    return await this.reports.query(...clauses).fetch();
   }
 
   async getReportById(id: string): Promise<ReportModel | null> {
