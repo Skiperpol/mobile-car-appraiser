@@ -27,3 +27,5 @@ export const database = new Database({
     ReportAttachments,
   ],
 });
+
+export { seedDatabase } from "./seeder";
