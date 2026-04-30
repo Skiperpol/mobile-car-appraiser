@@ -2,6 +2,8 @@ export type ReportPhoto = {
   id: string;
   title: string;
   comment: string;
+  uri?: string;
+  name?: string;
 };
 
 export type ReportDetails = {
