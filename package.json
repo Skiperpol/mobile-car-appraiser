@@ -4,14 +4,14 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@nozbe/watermelondb": "^0.28.0",
-    "@react-native-async-storage/async-storage": "^3.0.2",
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-navigation/native": "^7.0.14",
     "@rn-primitives/checkbox": "^1.4.0",
     "@rn-primitives/portal": "^1.4.0",
