@@ -13,8 +13,8 @@ export default function SettingsScreen() {
         contentContainerClassName="p-3"
         showsVerticalScrollIndicator={false}
       >
-        <SettingsGeneralSection />
         <SettingsSyncSection />
+        <SettingsGeneralSection />
         <SettingsAboutSection />
       </ScrollView>
       <SettingsFooter />
