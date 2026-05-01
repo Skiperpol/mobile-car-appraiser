@@ -3,7 +3,7 @@ import { Database, Q } from "@nozbe/watermelondb";
 import { database } from "..";
 
 export type ReportSortBy = "createdAtDesc" | "createdAtAsc" | "reportNumberAsc";
-export type ReportStatusFilter = "all" | "withPhoto" | "withoutPhoto";
+export type ReportStatusFilter = "all" | "synced" | "pending" | "error";
 
 class ReportRepository {
   private db: Database;
@@ -39,12 +39,16 @@ class ReportRepository {
       );
     }
 
-    if (status === "withPhoto") {
-      clauses.push(Q.where("image_name", Q.notEq(null)));
+    if (status === "synced") {
+      clauses.push(Q.where("report_state", "synced"));
     }
 
-    if (status === "withoutPhoto") {
-      clauses.push(Q.where("image_name", Q.eq(null)));
+    if (status === "pending") {
+      clauses.push(Q.where("report_state", "pending"));
+    }
+
+    if (status === "error") {
+      clauses.push(Q.where("report_state", "error"));
     }
 
     if (sortBy === "createdAtAsc") {
@@ -78,6 +82,7 @@ class ReportRepository {
         report.reportNumber = data.reportNumber;
         report.imageUrl = data.imageUrl;
         report.imageName = data.imageName;
+        report.reportState = data.reportState;
       });
     });
   }
@@ -92,6 +97,7 @@ class ReportRepository {
           if (data.orderId !== undefined) report.orderId = data.orderId;
           if (data.imageUrl) report.imageUrl = data.imageUrl;
           if (data.imageName) report.imageName = data.imageName;
+          if (data.reportState) report.reportState = data.reportState;
         });
       } catch (e) {
         console.warn(`Record ${id} not found, skipping update`);

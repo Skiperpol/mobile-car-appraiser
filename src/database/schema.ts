@@ -3,7 +3,7 @@ import { appSchema, tableSchema } from "@nozbe/watermelondb";
 // DODANO NAME DO ATTACHMENTÓW
 
 export default appSchema({
-  version: 1,
+  version: 2,
   tables: [
     tableSchema({
       name: "reports",
@@ -13,6 +13,7 @@ export default appSchema({
         { name: "order_id", type: "string", isOptional: true },
         { name: "image_url", type: "string", isOptional: true },
         { name: "image_name", type: "string", isOptional: true },
+        { name: "report_state", type: "string", isIndexed: true },
         { name: "created_at", type: "number", isIndexed: true },
         { name: "updated_at", type: "number" },
       ],

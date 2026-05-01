@@ -20,6 +20,7 @@ const TECHNICAL_FIELDS = [
 const SEED_REPORTS = [
   {
     userId: "seed-user",
+    reportState: "synced" as const,
     orderId: "WYP-2026-001",
     reportNumber: "RAP-2026-001",
     vehicle: {
@@ -42,6 +43,7 @@ const SEED_REPORTS = [
   },
   {
     userId: "seed-user",
+    reportState: "pending" as const,
     orderId: "WYP-2026-002",
     reportNumber: "RAP-2026-002",
     vehicle: {
@@ -64,6 +66,7 @@ const SEED_REPORTS = [
   },
   {
     userId: "seed-user",
+    reportState: "error" as const,
     orderId: "WYP-2026-003",
     reportNumber: "RAP-2026-003",
     vehicle: {
@@ -99,6 +102,7 @@ export async function seedDatabase(options: SeedOptions = {}) {
   let inserted = 0;
   for (const seed of SEED_REPORTS) {
     const createdReport = await reportRepository.createReport({
+      reportState: seed.reportState,
       userId: seed.userId,
       orderId: seed.orderId,
       reportNumber: seed.reportNumber,

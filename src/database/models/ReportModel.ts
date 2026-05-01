@@ -6,6 +6,7 @@ import ReportAttachmentsModel from "./ReportAttachmentsModel";
 import type ReportDynamicValueModel from "./ReportDynamicValueModel";
 
 export interface IReport {
+  reportState: "pending" | "synced" | "error";
   userId: string;
   orderId: string | null;
   reportNumber: string;
@@ -27,6 +28,7 @@ export default class ReportModel extends Model {
   @text("report_number") reportNumber!: string;
   @text("image_url") imageUrl!: string | null;
   @text("image_name") imageName!: string | null;
+  @text("report_state") reportState!: "pending" | "synced" | "error";
 
   @children("basic_data") basicData!: Query<BasicDataModel>;
   @children("report_dynamic_values")

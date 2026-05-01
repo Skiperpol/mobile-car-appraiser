@@ -57,10 +57,13 @@ export function useReportsListViewModel() {
 
   const mapStatusToRepository = (statusValue: string): ReportStatusFilter => {
     if (statusValue === "synced") {
-      return "withPhoto";
+      return "synced";
     }
     if (statusValue === "not-synced") {
-      return "withoutPhoto";
+      return "pending";
+    }
+    if (statusValue === "with-errors") {
+      return "error";
     }
     return "all";
   };
@@ -125,7 +128,7 @@ export function useReportsListViewModel() {
         tileColor: "bg-slate-900",
         plate: report.reportNumber || "Raport",
         carName: report.reportNumber || "Raport pojazdu",
-        completed: Boolean(report.imageName),
+        completed: report.reportState === "synced",
         date: formatDate(report.createdAt),
         photos: report.imageName ? "1/1" : "0/0",
       })),

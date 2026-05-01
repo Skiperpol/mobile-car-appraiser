@@ -34,7 +34,12 @@ export function useReportDetailsViewModel(reportId?: string) {
       carName:
         [basicData?.brand, basicData?.model].filter(Boolean).join(" ") ||
         report.reportNumber,
-      statusLabel: attachments.length > 0 ? "Uzupelniono zdjecia" : "Brak zdjec",
+      statusLabel:
+        report.reportState === "error"
+          ? "Blad synchronizacji"
+          : report.reportState === "synced"
+            ? "Zsynchronizowane"
+            : "Oczekuje synchronizacji",
       assignedOrderId: report.orderId ?? "-",
       reportNumber: report.reportNumber,
       make: basicData?.brand ?? "-",
@@ -95,6 +100,7 @@ export function useReportDetailsViewModel(reportId?: string) {
       await reportRepository.updateReport(reportId, {
         imageName: name,
         imageUrl: destination,
+        reportState: "synced",
       });
     }
 

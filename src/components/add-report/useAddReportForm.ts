@@ -110,6 +110,7 @@ export function useAddReportForm() {
 
     void handleSubmit(async (values) => {
       const createdReport = await reportRepository.createReport({
+        reportState: "pending",
         userId: "local-user",
         orderId: values.selectedOrderId ?? null,
         reportNumber: values.vehicle.reportNumber,
