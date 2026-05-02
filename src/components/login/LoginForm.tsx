@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useLogin } from "@/hooks/useLogin";
 import { ActivityIndicator, Pressable, View } from "react-native";
-import { PasswordInput } from "./PasswordInput";
+import { PasswordInput } from "../PasswordInput";
 
 export function LoginForm() {
   const {
