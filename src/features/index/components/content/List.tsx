@@ -1,17 +1,8 @@
 import { ScrollView, View } from "react-native";
+import type { ReportListItemVM } from "../../hooks/types";
 import Item from "./Item";
 
-interface Report {
-  id: string;
-  tileColor: string;
-  plate: string;
-  carName: string;
-  completed: boolean;
-  date: string;
-  photos: string;
-}
-
-export default function List({ reports }: { reports: Report[] }) {
+export default function List({ reports }: { reports: ReportListItemVM[] }) {
   return (
     <ScrollView
       className="flex-1"

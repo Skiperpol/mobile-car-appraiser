@@ -1,15 +1,15 @@
 import basicDataRepository from "@/database/repositories/BasicDataRepository";
 import reportAttachmentsRepository from "@/database/repositories/ReportAttachmentsModel";
 import reportRepository from "@/database/repositories/ReportRepository";
+import type { ReportDetails } from "@/features/report-details/types/types";
 import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ReportDetailsVM } from "./types";
 
 const REPORTS_DIR = `${FileSystem.documentDirectory}reports`;
 
 export function useReportDetailsViewModel(reportId?: string) {
-  const [details, setDetails] = useState<ReportDetailsVM | null>(null);
+  const [details, setDetails] = useState<ReportDetails | null>(null);
   const [isLoading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
@@ -27,7 +27,9 @@ export function useReportDetailsViewModel(reportId?: string) {
     }
 
     const basicData = await basicDataRepository.getByReportId(report.id);
-    const attachments = await reportAttachmentsRepository.getByReportId(report.id);
+    const attachments = await reportAttachmentsRepository.getByReportId(
+      report.id,
+    );
 
     setDetails({
       id: report.id,

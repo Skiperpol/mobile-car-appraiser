@@ -5,7 +5,7 @@ import reportRepository, {
 } from "@/database/repositories/ReportRepository";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ReportListItemVM } from "./types";
+import type { ReportListItemVM, ReportsFilterState } from "./types";
 
 type SelectOption = { value: string; label: string };
 
@@ -73,11 +73,9 @@ export function useReportsListViewModel() {
       try {
         const stored = await AsyncStorage.getItem(FILTERS_STORAGE_KEY);
         if (stored) {
-          const parsed = JSON.parse(stored) as {
-            search?: string;
-            sort?: string;
-            status?: string;
-          };
+          const parsed = JSON.parse(stored) as Partial<
+            ReportsFilterState & { sort: string; status: string }
+          >;
           if (typeof parsed.search === "string") {
             setSearch(parsed.search);
           }

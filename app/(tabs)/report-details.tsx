@@ -4,8 +4,8 @@ import { ReportDetailsBottomBar } from "@/features/report-details/components/con
 import { ReportInfoCard } from "@/features/report-details/components/content/ReportInfoCard";
 import { ReportInfoModal } from "@/features/report-details/components/content/ReportInfoModal";
 import { ReportDetailsHeader } from "@/features/report-details/components/header/ReportDetailsHeader";
+import { useReportDetailsViewModel } from "@/features/report-details/hooks/useReportDetailsViewModel";
 import { type ReportPhoto } from "@/features/report-details/types/types";
-import { useReportDetailsViewModel } from "@/viewmodels/reports/useReportDetailsViewModel";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";

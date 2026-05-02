@@ -1,7 +1,7 @@
 import Footer from "@/features/index/components/footer/Footer";
 import List from "@/features/index/components/content/List";
 import Header from "@/features/index/components/header/Header";
-import { useReportsListViewModel } from "@/viewmodels/reports/useReportsListViewModel";
+import { useReportsListViewModel } from "@/features/index/hooks/useReportsListViewModel";
 import { View } from "react-native";
 
 export default function HomeScreen() {
