@@ -1,6 +1,6 @@
 import { Search } from "lucide-react-native";
 import { View } from "react-native";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 export function SearchComponent({
   placeholder,

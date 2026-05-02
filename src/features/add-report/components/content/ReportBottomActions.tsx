@@ -1,8 +1,8 @@
+import FooterComponent from "@/components/layout/FooterComponent";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { Plus, ScanLine } from "lucide-react-native";
 import { View } from "react-native";
-import FooterComponent from "@/components/FooterComponent";
 import { type ReportStep } from "../../types/types";
 
 type ReportBottomActionsProps = {

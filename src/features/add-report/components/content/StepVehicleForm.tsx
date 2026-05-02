@@ -1,6 +1,6 @@
+import { FormField } from "@/components/forms/FormField";
 import { Text } from "@/components/ui/text";
 import { Controller, useFormContext } from "react-hook-form";
-import { FormField } from "@/components/FormField";
 import { type AddReportFormValues } from "../../types/types";
 
 export function StepVehicleForm() {

@@ -1,5 +1,5 @@
 import { LogOut } from "lucide-react-native";
-import FooterComponent from "../../../../components/FooterComponent";
+import FooterComponent from "../../../../components/layout/FooterComponent";
 import { Button } from "../../../../components/ui/button";
 import { Text } from "../../../../components/ui/text";
 

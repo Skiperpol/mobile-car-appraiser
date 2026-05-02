@@ -1,4 +1,4 @@
-import { FormField } from "@/components/FormField";
+import { FormField } from "@/components/forms/FormField";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { ScanLine, X } from "lucide-react-native";

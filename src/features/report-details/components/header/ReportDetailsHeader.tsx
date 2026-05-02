@@ -3,7 +3,7 @@ import { Text } from "@/components/ui/text";
 import { router } from "expo-router";
 import { ArrowLeft, RefreshCcw, Trash2 } from "lucide-react-native";
 import { View } from "react-native";
-import HeaderComponent from "../../../../components/HeaderComponent";
+import HeaderComponent from "../../../../components/layout/HeaderComponent";
 
 export function ReportDetailsHeader({ title }: { title: string }) {
   return (

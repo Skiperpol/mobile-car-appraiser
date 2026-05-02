@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 export function PasswordInput({
   value,

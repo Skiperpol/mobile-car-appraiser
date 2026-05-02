@@ -1,4 +1,4 @@
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme as useNativewindColorScheme } from "nativewind";
 import { useCallback, useEffect } from "react";
@@ -15,10 +15,13 @@ export function useThemePreference() {
   const themePreference: ThemePreference =
     colorScheme === "light" || colorScheme === "dark" ? colorScheme : "system";
 
-  const setThemePreference = useCallback((nextPreference: ThemePreference) => {
-    setColorScheme(nextPreference);
-    void AsyncStorage.setItem(THEME_PREFERENCE_KEY, nextPreference);
-  }, [setColorScheme]);
+  const setThemePreference = useCallback(
+    (nextPreference: ThemePreference) => {
+      setColorScheme(nextPreference);
+      void AsyncStorage.setItem(THEME_PREFERENCE_KEY, nextPreference);
+    },
+    [setColorScheme],
+  );
 
   useEffect(() => {
     if (hasHydratedThemePreference) {

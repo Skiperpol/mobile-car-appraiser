@@ -1,10 +1,10 @@
+import { PasswordInput } from "@/components/forms/PasswordInput";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useLogin } from "@/features/login/hooks/useLogin";
 import { ActivityIndicator, Pressable, View } from "react-native";
-import { PasswordInput } from "@/components/PasswordInput";
 
 export function LoginForm() {
   const {

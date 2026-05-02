@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { Camera, Download, Mail } from "lucide-react-native";
 import { View } from "react-native";
-import FooterComponent from "../../../../components/FooterComponent";
+import FooterComponent from "../../../../components/layout/FooterComponent";
 
 export function ReportDetailsBottomBar({
   onAddPhoto,

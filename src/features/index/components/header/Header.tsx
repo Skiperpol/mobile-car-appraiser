@@ -1,9 +1,9 @@
+import { type Option } from "@/components/ui/select";
 import React from "react";
-import HeaderComponent from "../../../../components/HeaderComponent";
+import HeaderComponent from "../../../../components/layout/HeaderComponent";
 import { HeaderFilters } from "./HeaderFilters";
 import { HeaderSearch } from "./HeaderSearch";
 import { HeaderTopBar } from "./HeaderTopBar";
-import { type Option } from "@/components/ui/select";
 
 export default function Header({
   searchValue,

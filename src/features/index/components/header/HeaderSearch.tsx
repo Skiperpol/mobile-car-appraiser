@@ -1,4 +1,4 @@
-import { SearchComponent } from "../../../../components/SearchComponent";
+import { SearchComponent } from "../../../../components/forms/SearchComponent";
 
 export function HeaderSearch({
   searchValue,

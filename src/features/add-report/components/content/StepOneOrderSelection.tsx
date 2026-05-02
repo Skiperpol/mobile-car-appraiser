@@ -1,7 +1,7 @@
+import { SearchComponent } from "@/components/forms/SearchComponent";
 import { Text } from "@/components/ui/text";
 import { Check } from "lucide-react-native";
 import { Pressable, View } from "react-native";
-import { SearchComponent } from "@/components/SearchComponent";
 import { type Order } from "../../types/types";
 
 type StepOneOrderSelectionProps = {

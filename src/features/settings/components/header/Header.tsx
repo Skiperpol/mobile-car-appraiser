@@ -1,9 +1,9 @@
+import HeaderComponent from "@/components/layout/HeaderComponent";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
 import { router } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
 import { View } from "react-native";
-import HeaderComponent from "@/components/HeaderComponent";
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/ui/text";
 
 export default function Header() {
   return (
