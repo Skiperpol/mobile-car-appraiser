@@ -1,5 +1,5 @@
-import { SettingsCard } from "@/features/settings/components/content/SettingsCard";
 import { Text } from "@/components/ui/text";
+import { SettingsCard } from "@/features/settings/components/content/SettingsCard";
 
 export function SettingsSyncSection() {
   return (
@@ -8,8 +8,7 @@ export function SettingsSyncSection() {
         Dane sa zapisywane lokalnie i automatycznie synchronizowane z serwerem.
       </Text>
       <Text className="mt-2 text-sm leading-4 text-zinc-500">
-        Status synchronizacji mozesz sprawdzic na liscie raportow i w
-        szczegolach kazdego raportu.
+        Status synchronizacji mozesz sprawdzic na liscie raportow i w szczegolach kazdego raportu.
       </Text>
     </SettingsCard>
   );

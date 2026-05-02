@@ -1,9 +1,6 @@
-import { SettingsCard } from "@/features/settings/components/content/SettingsCard";
 import { Text } from "@/components/ui/text";
-import {
-  useThemePreference,
-  type ThemePreference,
-} from "@/hooks/useThemePreference";
+import { SettingsCard } from "@/features/settings/components/content/SettingsCard";
+import { useThemePreference, type ThemePreference } from "@/hooks/useThemePreference";
 import { Pressable, View } from "react-native";
 
 const THEME_OPTIONS: Array<{ value: ThemePreference; label: string }> = [
@@ -12,14 +9,12 @@ const THEME_OPTIONS: Array<{ value: ThemePreference; label: string }> = [
   { value: "system", label: "Domyslny" },
 ];
 
-export function SettingsGeneralSection() {
+export function SettingsThemedSection() {
   const { themePreference, setThemePreference } = useThemePreference();
 
   return (
     <SettingsCard>
-      <Text className="text-lg font-semibold text-zinc-900">
-        Motyw aplikacji
-      </Text>
+      <Text className="text-lg font-semibold text-zinc-900">Motyw aplikacji</Text>
       <View className="mt-4 flex-row rounded-main bg-zinc-100 p-1 border border-zinc-200">
         {THEME_OPTIONS.map((option) => (
           <Pressable
@@ -30,11 +25,7 @@ export function SettingsGeneralSection() {
             }`}
           >
             <Text
-              className={`text-sm font-medium ${
-                themePreference === option.value
-                  ? "text-white"
-                  : "text-zinc-600"
-              }`}
+              className={`text-sm font-medium ${themePreference === option.value ? "text-white" : "text-zinc-600"}`}
             >
               {option.label}
             </Text>

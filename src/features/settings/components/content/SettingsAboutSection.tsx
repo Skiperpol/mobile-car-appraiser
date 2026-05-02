@@ -1,7 +1,7 @@
-import { SettingsCard } from "@/features/settings/components/content/SettingsCard";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { seedDatabase } from "@/database/seeder";
+import { SettingsCard } from "@/features/settings/components/content/SettingsCard";
 import { useAppInfo } from "@/hooks/useAppInfo";
 import { useState } from "react";
 import { Alert, View } from "react-native";
