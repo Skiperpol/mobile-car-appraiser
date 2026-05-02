@@ -1,18 +1,21 @@
 import { Eye, EyeOff } from "lucide-react-native";
-import type { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { Input } from "../ui/input";
 
 export function PasswordInput({
-  isPasswordVisible,
-  setIsPasswordVisible,
+  value,
+  onChangeText,
 }: {
-  isPasswordVisible: boolean;
-  setIsPasswordVisible: Dispatch<SetStateAction<boolean>>;
+  value: string;
+  onChangeText: (text: string) => void;
 }) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   return (
     <View className="relative">
       <Input
+        value={value}
+        onChangeText={onChangeText}
         placeholder={isPasswordVisible ? "K7mP92!vXQ" : "••••••••••"}
         secureTextEntry={!isPasswordVisible}
         className="pr-12 text-main"

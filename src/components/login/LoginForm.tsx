@@ -2,18 +2,22 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { router } from "expo-router";
-import { useState } from "react";
-import { Pressable, View } from "react-native";
+import { useLogin } from "@/hooks/useLogin";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import { PasswordInput } from "./PasswordInput";
 
-type LoginFormProps = {
-  rememberMe: boolean;
-  onToggleRememberMe: () => void;
-};
-
-export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+export function LoginForm() {
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    rememberMe,
+    toggleRememberMe,
+    login,
+    isLoading,
+    error,
+  } = useLogin();
 
   return (
     <View className="-mt-8 rounded-t-3xl bg-white p-4">
@@ -25,23 +29,27 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
         <View className="gap-1">
           <Text className="text-sm font-semibold text-input">Email</Text>
           <Input
+            value={email}
+            onChangeText={setEmail}
             placeholder="jan.kowalski@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
+            autoCorrect={false}
             className=""
           />
         </View>
 
         <View className="gap-1">
           <Text className="text-sm font-semibold text-input">Hasło</Text>
-          <PasswordInput
-            isPasswordVisible={isPasswordVisible}
-            setIsPasswordVisible={setIsPasswordVisible}
-          />
+          <PasswordInput value={password} onChangeText={setPassword} />
         </View>
 
+        {error ? (
+          <Text className="text-sm font-medium text-red-600">{error}</Text>
+        ) : null}
+
         <Pressable
-          onPress={onToggleRememberMe}
+          onPress={toggleRememberMe}
           className="flex-row items-center gap-3"
         >
           <Checkbox checked={rememberMe} pointerEvents="none" />
@@ -50,8 +58,12 @@ export function LoginForm({ rememberMe, onToggleRememberMe }: LoginFormProps) {
           </Text>
         </Pressable>
       </View>
-      <Button variant="main" onPress={() => router.replace("/(tabs)")}>
-        <Text>Zaloguj się</Text>
+      <Button variant="main" disabled={isLoading} onPress={() => void login()}>
+        {isLoading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text>Zaloguj się</Text>
+        )}
       </Button>
     </View>
   );

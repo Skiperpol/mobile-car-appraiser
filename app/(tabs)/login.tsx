@@ -1,11 +1,8 @@
 import { LoginForm } from "@/components/login/LoginForm";
 import { LoginHeader } from "@/components/login/LoginHeader";
-import { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 
 export default function LoginScreen() {
-  const [rememberMe, setRememberMe] = useState(false);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -19,10 +16,7 @@ export default function LoginScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <LoginHeader />
-        <LoginForm
-          rememberMe={rememberMe}
-          onToggleRememberMe={() => setRememberMe((prev) => !prev)}
-        />
+        <LoginForm />
       </ScrollView>
     </KeyboardAvoidingView>
   );
