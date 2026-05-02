@@ -1,5 +1,5 @@
 import { useColorScheme } from "@/hooks/useColorScheme";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storage } from "@/lib/mmkv-storage";
 import { useColorScheme as useNativewindColorScheme } from "nativewind";
 import { useCallback, useEffect } from "react";
 
@@ -18,7 +18,7 @@ export function useThemePreference() {
   const setThemePreference = useCallback(
     (nextPreference: ThemePreference) => {
       setColorScheme(nextPreference);
-      void AsyncStorage.setItem(THEME_PREFERENCE_KEY, nextPreference);
+      storage.set(THEME_PREFERENCE_KEY, nextPreference);
     },
     [setColorScheme],
   );
@@ -31,7 +31,7 @@ export function useThemePreference() {
 
     const loadPreference = async () => {
       try {
-        const stored = await AsyncStorage.getItem(THEME_PREFERENCE_KEY);
+        const stored = storage.getString(THEME_PREFERENCE_KEY);
         if (stored === "light" || stored === "dark" || stored === "system") {
           setColorScheme(stored);
         }

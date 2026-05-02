@@ -6,7 +6,6 @@ import { useCallback, useState } from "react";
 export function useLogin() {
   const [email, setEmailState] = useState("");
   const [password, setPasswordState] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,16 +19,12 @@ export function useLogin() {
     setPasswordState(value);
   }, []);
 
-  const toggleRememberMe = useCallback(() => {
-    setRememberMe((prev) => !prev);
-  }, []);
-
   const login = useCallback(async () => {
     setError(null);
     setIsLoading(true);
     try {
       const { accessToken } = await loginWithPassword(email, password);
-      await setAccessToken(accessToken, { persist: rememberMe });
+      await setAccessToken(accessToken);
       router.replace("/(tabs)/index" as Href);
     } catch (e) {
       const message =
@@ -38,15 +33,13 @@ export function useLogin() {
     } finally {
       setIsLoading(false);
     }
-  }, [email, password, rememberMe]);
+  }, [email, password]);
 
   return {
     email,
     setEmail,
     password,
     setPassword,
-    rememberMe,
-    toggleRememberMe,
     login,
     isLoading,
     error,

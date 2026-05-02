@@ -1,25 +1,18 @@
 import { ACCESS_TOKEN_KEY } from "@/features/auth/storage/constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 let memoryAccessToken: string | null = null;
 
-export async function setAccessToken(
-  token: string,
-  options: { persist: boolean },
-): Promise<void> {
+export async function setAccessToken(token: string): Promise<void> {
   memoryAccessToken = token;
-  if (options.persist) {
-    await AsyncStorage.setItem(ACCESS_TOKEN_KEY, token);
-  } else {
-    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
-  }
+  await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, token);
 }
 
 export async function getAccessToken(): Promise<string | null> {
   if (memoryAccessToken) {
     return memoryAccessToken;
   }
-  const stored = await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
+  const stored = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
   if (stored) {
     memoryAccessToken = stored;
   }
@@ -28,5 +21,5 @@ export async function getAccessToken(): Promise<string | null> {
 
 export async function clearAccessToken(): Promise<void> {
   memoryAccessToken = null;
-  await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
+  await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
 }

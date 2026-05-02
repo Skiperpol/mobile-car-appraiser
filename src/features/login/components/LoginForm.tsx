@@ -1,10 +1,9 @@
 import { PasswordInput } from "@/components/forms/PasswordInput";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useLogin } from "@/features/login/hooks/useLogin";
-import { ActivityIndicator, Pressable, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 export function LoginForm() {
   const {
@@ -12,8 +11,6 @@ export function LoginForm() {
     setEmail,
     password,
     setPassword,
-    rememberMe,
-    toggleRememberMe,
     login,
     isLoading,
     error,
@@ -48,15 +45,6 @@ export function LoginForm() {
           <Text className="text-sm font-medium text-red-600">{error}</Text>
         ) : null}
 
-        <Pressable
-          onPress={toggleRememberMe}
-          className="flex-row items-center gap-3"
-        >
-          <Checkbox checked={rememberMe} pointerEvents="none" />
-          <Text className="text-sm font-medium text-zinc-600">
-            Zapamiętaj mnie
-          </Text>
-        </Pressable>
       </View>
       <Button variant="main" disabled={isLoading} onPress={() => void login()}>
         {isLoading ? (

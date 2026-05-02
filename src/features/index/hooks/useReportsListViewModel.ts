@@ -3,7 +3,7 @@ import reportRepository, {
   type ReportSortBy,
   type ReportStatusFilter,
 } from "@/database/repositories/ReportRepository";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storage } from "@/lib/mmkv-storage";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReportListItemVM, ReportsFilterState } from "./types";
 
@@ -71,7 +71,7 @@ export function useReportsListViewModel() {
   useEffect(() => {
     const hydrateFilters = async () => {
       try {
-        const stored = await AsyncStorage.getItem(FILTERS_STORAGE_KEY);
+        const stored = storage.getString(FILTERS_STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored) as Partial<
             ReportsFilterState & { sort: string; status: string }
@@ -102,7 +102,7 @@ export function useReportsListViewModel() {
       return;
     }
 
-    void AsyncStorage.setItem(
+    storage.set(
       FILTERS_STORAGE_KEY,
       JSON.stringify({
         search,
