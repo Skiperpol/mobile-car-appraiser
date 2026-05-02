@@ -1,5 +1,5 @@
-import { LoginForm } from "@/components/login/LoginForm";
-import { LoginHeader } from "@/components/login/LoginHeader";
+import { LoginForm } from "@/features/login/components/LoginForm";
+import { LoginHeader } from "@/features/login/components/LoginHeader";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 
 export default function LoginScreen() {

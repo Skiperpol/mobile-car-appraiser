@@ -1,6 +1,6 @@
-import Footer from "@/components/index/Footer";
-import Header from "@/components/index/Header";
-import List from "@/components/index/List";
+import Footer from "@/features/index/components/footer/Footer";
+import List from "@/features/index/components/content/List";
+import Header from "@/features/index/components/header/Header";
 import { useReportsListViewModel } from "@/viewmodels/reports/useReportsListViewModel";
 import { View } from "react-native";
 

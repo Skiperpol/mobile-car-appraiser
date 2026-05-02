@@ -1,10 +1,10 @@
-import { PhotoCommentModal } from "@/components/report-details/PhotoCommentModal";
-import { PhotosGridCard } from "@/components/report-details/PhotosGridCard";
-import { ReportDetailsBottomBar } from "@/components/report-details/ReportDetailsBottomBar";
-import { ReportDetailsHeader } from "@/components/report-details/ReportDetailsHeader";
-import { ReportInfoCard } from "@/components/report-details/ReportInfoCard";
-import { ReportInfoModal } from "@/components/report-details/ReportInfoModal";
-import { type ReportPhoto } from "@/components/report-details/types";
+import { PhotoCommentModal } from "@/features/report-details/components/content/PhotoCommentModal";
+import { PhotosGridCard } from "@/features/report-details/components/content/PhotosGridCard";
+import { ReportDetailsBottomBar } from "@/features/report-details/components/content/ReportDetailsBottomBar";
+import { ReportInfoCard } from "@/features/report-details/components/content/ReportInfoCard";
+import { ReportInfoModal } from "@/features/report-details/components/content/ReportInfoModal";
+import { ReportDetailsHeader } from "@/features/report-details/components/header/ReportDetailsHeader";
+import { type ReportPhoto } from "@/features/report-details/types/types";
 import { useReportDetailsViewModel } from "@/viewmodels/reports/useReportDetailsViewModel";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";

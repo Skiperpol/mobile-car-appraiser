@@ -1,8 +1,8 @@
-import { SettingsFooter } from "@/components/settings/Footer";
-import Header from "@/components/settings/Header";
-import { SettingsAboutSection } from "@/components/settings/SettingsAboutSection";
-import { SettingsGeneralSection } from "@/components/settings/SettingsGeneralSection";
-import { SettingsSyncSection } from "@/components/settings/SettingsSyncSection";
+import { SettingsAboutSection } from "@/features/settings/components/content/SettingsAboutSection";
+import { SettingsGeneralSection } from "@/features/settings/components/content/SettingsGeneralSection";
+import { SettingsSyncSection } from "@/features/settings/components/content/SettingsSyncSection";
+import { SettingsFooter } from "@/features/settings/components/footer/Footer";
+import Header from "@/features/settings/components/header/Header";
 import { ScrollView, View } from "react-native";
 
 export default function SettingsScreen() {

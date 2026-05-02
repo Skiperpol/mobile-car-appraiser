@@ -1,10 +1,10 @@
-import { CreateOrderModal } from "@/components/add-report/CreateOrderModal";
-import { ReportBottomActions } from "@/components/add-report/ReportBottomActions";
-import { ReportHeader } from "@/components/add-report/ReportHeader";
-import { StepOneOrderSelection } from "@/components/add-report/StepOneOrderSelection";
-import { StepTechnicalForm } from "@/components/add-report/StepTechnicalForm";
-import { StepVehicleForm } from "@/components/add-report/StepVehicleForm";
-import { useAddReportForm } from "@/components/add-report/useAddReportForm";
+import { CreateOrderModal } from "@/features/add-report/components/content/CreateOrderModal";
+import { ReportBottomActions } from "@/features/add-report/components/content/ReportBottomActions";
+import { StepOneOrderSelection } from "@/features/add-report/components/content/StepOneOrderSelection";
+import { StepTechnicalForm } from "@/features/add-report/components/content/StepTechnicalForm";
+import { StepVehicleForm } from "@/features/add-report/components/content/StepVehicleForm";
+import { ReportHeader } from "@/features/add-report/components/header/ReportHeader";
+import { useAddReportForm } from "@/features/add-report/hooks/useAddReportForm";
 import { FormProvider } from "react-hook-form";
 import { ScrollView, View } from "react-native";
 
