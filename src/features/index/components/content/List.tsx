@@ -1,5 +1,5 @@
 import { ScrollView, View } from "react-native";
-import type { ReportListItemVM } from "../../hooks/types";
+import type { ReportListItemVM } from "../../types/types";
 import Item from "./Item";
 
 export default function List({ reports }: { reports: ReportListItemVM[] }) {

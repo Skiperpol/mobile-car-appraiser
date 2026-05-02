@@ -5,7 +5,7 @@ import reportRepository, {
 } from "@/database/repositories/ReportRepository";
 import { storage } from "@/lib/mmkv-storage";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ReportListItemVM, ReportsFilterState } from "./types";
+import type { ReportListItemVM, ReportsFilterState } from "../types/types";
 
 type SelectOption = { value: string; label: string };
 
