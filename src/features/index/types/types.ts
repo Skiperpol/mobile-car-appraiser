@@ -15,3 +15,8 @@ export type ReportsFilterState = {
   sort: Option | null;
   status: Option | null;
 };
+
+export type ReportOption = {
+  value: string;
+  label: string;
+};
