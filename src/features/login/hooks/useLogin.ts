@@ -1,5 +1,5 @@
-import { loginWithPassword } from "@/lib/auth-api";
-import { setAccessToken } from "@/lib/auth-storage";
+import { loginWithPassword } from "@/features/auth/api/auth-api";
+import { setAccessToken } from "@/features/auth/storage/auth-storage";
 import { router, type Href } from "expo-router";
 import { useCallback, useState } from "react";
 
@@ -24,24 +24,21 @@ export function useLogin() {
     setRememberMe((prev) => !prev);
   }, []);
 
-  const login = useCallback(
-    async () => {
-      setError(null);
-      setIsLoading(true);
-      try {
-        const { accessToken } = await loginWithPassword(email, password);
-        await setAccessToken(accessToken, { persist: rememberMe });
-        router.replace("/(tabs)/index" as Href);
-      } catch (e) {
-        const message =
-          e instanceof Error ? e.message : "Nie udało się zalogować";
-        setError(message);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, password, rememberMe],
-  );
+  const login = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      const { accessToken } = await loginWithPassword(email, password);
+      await setAccessToken(accessToken, { persist: rememberMe });
+      router.replace("/(tabs)/index" as Href);
+    } catch (e) {
+      const message =
+        e instanceof Error ? e.message : "Nie udało się zalogować";
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [email, password, rememberMe]);
 
   return {
     email,

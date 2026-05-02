@@ -1,6 +1,5 @@
+import { ACCESS_TOKEN_KEY } from "@/features/auth/storage/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const ACCESS_TOKEN_KEY = "car_appraiser_access_token";
 
 let memoryAccessToken: string | null = null;
 
