@@ -1,16 +1,9 @@
-import {
-  INITIAL_ADD_REPORT_FORM_VALUES,
-  INITIAL_ORDERS,
-} from "@/features/add-report/constants";
-import { addReportSchema } from "@/features/add-report/types/schema";
 import basicDataRepository from "@/database/repositories/BasicDataRepository";
 import reportDynamicValueRepository from "@/database/repositories/ReportDynamicValueModel";
 import reportRepository from "@/database/repositories/ReportRepository";
-import {
-  type AddReportFormValues,
-  type Order,
-  type ReportStep,
-} from "@/features/add-report/types/types";
+import { INITIAL_ADD_REPORT_FORM_VALUES, INITIAL_ORDERS } from "@/features/add-report/constants/constants";
+import { addReportSchema } from "@/features/add-report/types/schema";
+import { type AddReportFormValues, type Order, type ReportStep } from "@/features/add-report/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
@@ -47,9 +40,7 @@ export function useAddReportForm() {
       return orders;
     }
 
-    return orders.filter((order) =>
-      `${order.id} ${order.title}`.toLowerCase().includes(query),
-    );
+    return orders.filter((order) => `${order.id} ${order.title}`.toLowerCase().includes(query));
   }, [orders, searchValue]);
 
   const handleHeaderBack = () => {
@@ -131,9 +122,7 @@ export function useAddReportForm() {
           : null,
       });
 
-      const dynamicEntries = Object.entries(values.technical).filter(
-        ([, value]) => value?.trim(),
-      );
+      const dynamicEntries = Object.entries(values.technical).filter(([, value]) => value?.trim());
       await Promise.all(
         dynamicEntries.map(([fieldId, value]) =>
           reportDynamicValueRepository.createReportDynamicValue({
