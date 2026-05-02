@@ -1,11 +1,16 @@
 import { cn } from "@/lib/utils";
 import { Platform, TextInput } from "react-native";
 
+interface InputProps extends React.ComponentProps<typeof TextInput> {
+  error?: boolean;
+}
+
 function Input({
   className,
   placeholderTextColor,
+  error,
   ...props
-}: React.ComponentProps<typeof TextInput>) {
+}: InputProps) {
   return (
     <TextInput
       placeholderTextColor={
@@ -13,6 +18,7 @@ function Input({
       }
       className={cn(
         "dark:bg-input/30 border-input bg-white text-main flex h-base w-full min-w-0 flex-row items-center rounded-main border px-3 py-1 text-base leading-5 sm:h-9",
+        error ? "border-red-500 bg-red-50" : "border-input",
         props.editable === false &&
           cn(
             "opacity-50",
@@ -23,8 +29,9 @@ function Input({
         Platform.select({
           web: cn(
             "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground outline-none transition-[color,box-shadow] md:text-sm",
-            "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-            "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+            error
+              ? "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+              : "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           ),
           native: "placeholder:text-foreground-muted/50",
         }),

@@ -1,47 +1,56 @@
 import { loginWithPassword } from "@/features/auth/api/auth-api";
 import { setAccessToken } from "@/features/auth/storage/auth-storage";
-import { router, type Href } from "expo-router";
-import { useCallback, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { loginSchema } from "../types/schema";
+import { LoginFormData } from "../types/types";
 
 export function useLogin() {
-  const [email, setEmailState] = useState("");
-  const [password, setPasswordState] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const setEmail = useCallback((value: string) => {
-    setError(null);
-    setEmailState(value);
-  }, []);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
 
-  const setPassword = useCallback((value: string) => {
-    setError(null);
-    setPasswordState(value);
-  }, []);
+  const formValues = watch();
+  useEffect(() => {
+    if (serverError) setServerError(null);
+  }, [formValues.email, formValues.password]);
 
-  const login = useCallback(async () => {
-    setError(null);
+  const onSubmit = async (data: LoginFormData) => {
+    setServerError(null);
     setIsLoading(true);
     try {
-      const { accessToken } = await loginWithPassword(email, password);
-      await setAccessToken(accessToken);
-      router.replace("/(tabs)/index" as Href);
+      const { accessToken } = await loginWithPassword(
+        data.email,
+        data.password,
+      );
+      setAccessToken(accessToken);
+      router.replace("/(tabs)");
     } catch (e) {
-      const message =
-        e instanceof Error ? e.message : "Nie udało się zalogować";
-      setError(message);
+      setServerError(e instanceof Error ? e.message : "Błąd logowania");
     } finally {
       setIsLoading(false);
     }
-  }, [email, password]);
-
-  return {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    login,
-    isLoading,
-    error,
   };
+
+  return useMemo(
+    () => ({
+      control,
+      handleLogin: handleSubmit(onSubmit),
+      isLoading,
+      serverError,
+      errors,
+    }),
+    [control, handleSubmit, isLoading, serverError, errors],
+  );
 }

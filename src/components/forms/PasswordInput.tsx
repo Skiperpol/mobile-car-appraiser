@@ -6,9 +6,13 @@ import { Input } from "../ui/input";
 export function PasswordInput({
   value,
   onChangeText,
+  onBlur,
+  error,
 }: {
   value: string;
   onChangeText: (text: string) => void;
+  onBlur: () => void;
+  error?: boolean;
 }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   return (
@@ -19,6 +23,8 @@ export function PasswordInput({
         placeholder={isPasswordVisible ? "K7mP92!vXQ" : "••••••••••"}
         secureTextEntry={!isPasswordVisible}
         className="pr-12 text-main"
+        onBlur={onBlur}
+        error={error}
       />
       <Pressable
         onPress={() => setIsPasswordVisible((prev) => !prev)}
