@@ -34,8 +34,7 @@
     },
     "plugins": ["expo-router"],
     "extra": {
-      "lastUpdateAt": "2026-04-22",
-      "apiBaseUrl": "http://127.0.0.1:3000/v1"
+      "lastUpdateAt": "2026-04-22"
     },
     "experiments": {
       "typedRoutes": true
