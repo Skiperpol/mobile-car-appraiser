@@ -1,13 +1,12 @@
 import { apiClient } from "@/lib/axios-client";
 import axios from "axios";
+import { router } from "expo-router";
+import { clearAccessToken } from "../storage/auth-storage";
 import type { LoginResponse } from "../types/api-types";
 import { formatValidationMessage } from "./auth-api-utils";
 import { AuthApiError } from "./errors";
 
-export async function loginWithPassword(
-  email: string,
-  password: string,
-): Promise<LoginResponse> {
+export async function loginWithPassword(email: string, password: string): Promise<LoginResponse> {
   try {
     const { data } = await apiClient.post<LoginResponse>("/api/auth/login", {
       email: email.trim(),
@@ -24,4 +23,9 @@ export async function loginWithPassword(
     }
     throw new AuthApiError("Unknown error", 0);
   }
+}
+
+export async function logout() {
+  await clearAccessToken();
+  router.replace("/(tabs)/login");
 }

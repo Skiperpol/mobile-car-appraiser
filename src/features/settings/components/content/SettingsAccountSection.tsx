@@ -1,7 +1,8 @@
+import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { logout } from "@/features/auth/api/auth-api";
 import { LogOut } from "lucide-react-native";
 import { View } from "react-native";
-import { Button } from "@/components/ui/button";
 
 export function SettingsAccountSection() {
   return (
@@ -11,11 +12,12 @@ export function SettingsAccountSection() {
         variant="destructive"
         size="sm"
         className="mt-3 h-base flex-row items-center justify-center rounded-main bg-rose-600 active:bg-rose-700"
+        onPress={() => {
+          void logout();
+        }}
       >
         <LogOut size={14} color="#ffffff" />
-        <Text className="ml-2 text-base font-semibold text-white">
-          Wyloguj sie
-        </Text>
+        <Text className="ml-2 text-base font-semibold text-white">Wyloguj się</Text>
       </Button>
     </View>
   );
