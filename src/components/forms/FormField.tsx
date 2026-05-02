@@ -1,10 +1,14 @@
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useThemePreference } from "@/hooks/useThemePreference";
-import { THEME } from "@/lib/theme";
 import { TextInput, View, type TextInputProps } from "react-native";
 
 type FormFieldProps = { label: string; multiline?: boolean } & TextInputProps;
+
+const PLACEHOLDER_COLOR_BY_MODE = {
+  light: "#71717a", // zinc-500
+  dark: "#a1a1aa", // zinc-400
+} as const;
 
 export function FormField({
   label,
@@ -23,7 +27,9 @@ export function FormField({
           multiline
           textAlignVertical="top"
           className="h-24 w-full border border-zinc-200 px-4 py-3 text-lg text-zinc-900 rounded-main"
-          placeholderTextColor={placeholderTextColor ?? THEME[mode].placeholder}
+          placeholderTextColor={
+            placeholderTextColor ?? PLACEHOLDER_COLOR_BY_MODE[mode]
+          }
           {...props}
         />
         {errorMessage ? (
@@ -38,7 +44,9 @@ export function FormField({
       <Text className="mb-2 text-[16px] text-black">{label}</Text>
       <Input
         className="border-zinc-200 px-4 text-lg "
-        placeholderTextColor={placeholderTextColor ?? THEME[mode].placeholder}
+        placeholderTextColor={
+          placeholderTextColor ?? PLACEHOLDER_COLOR_BY_MODE[mode]
+        }
         {...props}
       />
       {errorMessage ? (
