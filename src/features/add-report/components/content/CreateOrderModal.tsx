@@ -2,7 +2,7 @@ import { FormField } from "@/components/forms/FormField";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { X } from "lucide-react-native";
-import { Modal, Pressable, StyleSheet, View } from "react-native";
+import { Modal, Pressable, View } from "react-native";
 import Animated, { SlideInDown } from "react-native-reanimated";
 
 type CreateOrderModalProps = {
@@ -32,12 +32,12 @@ export function CreateOrderModal({
       statusBarTranslucent
       onRequestClose={onClose}
     >
-      <View style={styles.root}>
-        <Pressable style={styles.backdrop} onPress={onClose} />
-        <View style={styles.sheetContainer}>
+      <View className="flex-1">
+        <Pressable className="absolute inset-0 bg-black/45" onPress={onClose} />
+        <View className="flex-1 justify-end">
           <Animated.View
             entering={SlideInDown.duration(220)}
-            style={styles.sheet}
+            className="rounded-t-3xl bg-white px-5 pt-5 pb-6"
           >
             <View className="mb-5 flex-row items-center justify-between">
               <Text variant="main">Nowe zlecenie</Text>
@@ -73,25 +73,3 @@ export function CreateOrderModal({
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.45)",
-  },
-  sheetContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  sheet: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    backgroundColor: "#ffffff",
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 24,
-  },
-});
