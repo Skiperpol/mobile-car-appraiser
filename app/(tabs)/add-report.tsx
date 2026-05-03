@@ -1,8 +1,8 @@
 import { CreateOrderModal } from "@/features/add-report/components/content/CreateOrderModal";
-import { ReportBottomActions } from "@/features/add-report/components/content/ReportBottomActions";
 import { StepOneOrderSelection } from "@/features/add-report/components/content/StepOneOrderSelection";
 import { StepTechnicalForm } from "@/features/add-report/components/content/StepTechnicalForm";
 import { StepVehicleForm } from "@/features/add-report/components/content/StepVehicleForm";
+import { ReportBottomActions } from "@/features/add-report/components/footer/ReportBottomActions";
 import { ReportHeader } from "@/features/add-report/components/header/ReportHeader";
 import { useAddReportForm } from "@/features/add-report/hooks/useAddReportForm";
 import { FormProvider } from "react-hook-form";
@@ -34,10 +34,7 @@ export default function AddReportScreen() {
       <View className="flex-1 bg-zinc-100">
         <ReportHeader step={step} onBack={handleHeaderBack} />
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerClassName="p-4"
-        >
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="p-4">
           {step === 1 ? (
             <StepOneOrderSelection
               searchValue={searchValue}
