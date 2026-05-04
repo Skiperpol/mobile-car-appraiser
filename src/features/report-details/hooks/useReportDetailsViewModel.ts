@@ -5,6 +5,7 @@ import type { ReportDetails } from "@/features/report-details/types/types";
 import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert } from "react-native";
 
 const REPORTS_DIR = `${FileSystem.documentDirectory}reports`;
 
@@ -68,45 +69,75 @@ export function useReportDetailsViewModel(reportId?: string) {
       return;
     }
 
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      return;
-    }
+    const handlePickedAsset = async (asset: ImagePicker.ImagePickerAsset) => {
+      const extension = asset.fileName?.split(".").pop() ?? "jpg";
+      const name = `${Date.now()}.${extension}`;
+      const reportDir = `${REPORTS_DIR}/${reportId}`;
+      const destination = `${reportDir}/${name}`;
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      quality: 0.8,
-    });
-    if (result.canceled || result.assets.length === 0) {
-      return;
-    }
+      await FileSystem.makeDirectoryAsync(reportDir, { intermediates: true });
+      await FileSystem.copyAsync({ from: asset.uri, to: destination });
 
-    const asset = result.assets[0];
-    const extension = asset.fileName?.split(".").pop() ?? "jpg";
-    const name = `${Date.now()}.${extension}`;
-    const reportDir = `${REPORTS_DIR}/${reportId}`;
-    const destination = `${reportDir}/${name}`;
-
-    await FileSystem.makeDirectoryAsync(reportDir, { intermediates: true });
-    await FileSystem.copyAsync({ from: asset.uri, to: destination });
-
-    await reportAttachmentsRepository.createReportAttachments({
-      reportId,
-      url: destination,
-      name,
-      comment: null,
-    });
-
-    const report = await reportRepository.getReportById(reportId);
-    if (report && !report.imageName) {
-      await reportRepository.updateReport(reportId, {
-        imageName: name,
-        imageUrl: destination,
-        reportState: "synced",
+      await reportAttachmentsRepository.createReportAttachments({
+        reportId,
+        url: destination,
+        name,
+        comment: null,
       });
-    }
 
-    await load();
+      const report = await reportRepository.getReportById(reportId);
+      if (report && !report.imageName) {
+        await reportRepository.updateReport(reportId, {
+          imageName: name,
+          imageUrl: destination,
+          reportState: "synced",
+        });
+      }
+
+      await load();
+    };
+
+    const pickFromGallery = async () => {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert("Brak uprawnienia", "Nadaj dostep do galerii, aby wybrac zdjecie.");
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        quality: 0.8,
+      });
+      if (result.canceled || result.assets.length === 0) {
+        return;
+      }
+
+      await handlePickedAsset(result.assets[0]);
+    };
+
+    const takePhoto = async () => {
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert("Brak uprawnienia", "Nadaj dostep do kamery, aby zrobic zdjecie.");
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ["images"],
+        quality: 0.8,
+      });
+      if (result.canceled || result.assets.length === 0) {
+        return;
+      }
+
+      await handlePickedAsset(result.assets[0]);
+    };
+
+    Alert.alert("Dodaj zdjecie", "Wybierz zrodlo zdjecia", [
+      { text: "Aparat", onPress: () => void takePhoto() },
+      { text: "Galeria", onPress: () => void pickFromGallery() },
+      { text: "Anuluj", style: "cancel" },
+    ]);
   }, [load, reportId]);
 
   const savePhotoComment = useCallback(

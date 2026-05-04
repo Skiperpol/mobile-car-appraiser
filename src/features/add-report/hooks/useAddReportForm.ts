@@ -118,36 +118,51 @@ export function useAddReportForm() {
       (decodedData.maksymalnaMocNettoSilnikaKW as { value?: string } | undefined)
         ?.value ?? "";
 
+    let mappedFieldsCount = 0;
+    const formSetOptions = { shouldDirty: true, shouldTouch: true };
+
     if (registrationNumber) {
-      setValue("vehicle.registrationNumber", registrationNumber);
+      setValue("vehicle.registrationNumber", registrationNumber, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (make) {
-      setValue("vehicle.make", make);
+      setValue("vehicle.make", make, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (model) {
-      setValue("vehicle.model", model);
+      setValue("vehicle.model", model, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (vin) {
-      setValue("vehicle.vin", vin);
+      setValue("vehicle.vin", vin, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (productionYear) {
-      setValue("vehicle.productionYear", productionYear);
+      setValue("vehicle.productionYear", productionYear, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (maxWeight) {
-      setValue("technical.maxWeight", maxWeight);
+      setValue("technical.maxWeight", maxWeight, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (bodyType) {
-      setValue("technical.bodyType", bodyType);
+      setValue("technical.bodyType", bodyType, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (driveUnit) {
-      setValue("technical.driveUnit", driveUnit);
+      setValue("technical.driveUnit", driveUnit, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (engineCapacity) {
-      setValue("technical.engineCapacity", engineCapacity);
+      setValue("technical.engineCapacity", engineCapacity, formSetOptions);
+      mappedFieldsCount += 1;
     }
     if (enginePower) {
-      setValue("technical.enginePower", enginePower);
+      setValue("technical.enginePower", enginePower, formSetOptions);
+      mappedFieldsCount += 1;
     }
+
+    return mappedFieldsCount;
   };
 
   const handleAztecScan = async (rawValue: string) => {
@@ -157,9 +172,46 @@ export function useAddReportForm() {
 
     setDecodingAztec(true);
     try {
-      const decoder = new PolishVehicleRegistrationCertificateDecoder(rawValue);
-      const decodedData = decoder.data as unknown as Record<string, unknown>;
-      applyAztecDataToForm(decodedData);
+      const normalizedRaw = rawValue.trim();
+      const rawAfterComma = normalizedRaw.includes(",")
+        ? normalizedRaw.slice(normalizedRaw.lastIndexOf(",") + 1)
+        : normalizedRaw;
+      const decodeCandidates = Array.from(
+        new Set([
+          rawValue,
+          normalizedRaw,
+          rawAfterComma,
+          normalizedRaw.replace(/\s+/g, ""),
+          rawAfterComma.replace(/\s+/g, ""),
+          decodeURIComponent(normalizedRaw),
+          decodeURIComponent(rawAfterComma),
+        ]),
+      ).filter(Boolean);
+
+      let decodedData: Record<string, unknown> | null = null;
+
+      for (const candidate of decodeCandidates) {
+        try {
+          const decoder = new PolishVehicleRegistrationCertificateDecoder(candidate);
+          decodedData = decoder.data as unknown as Record<string, unknown>;
+          break;
+        } catch {
+          // Try next normalized candidate.
+        }
+      }
+
+      if (!decodedData) {
+        throw new Error("Aztec decode failed");
+      }
+
+      const mappedFieldsCount = applyAztecDataToForm(decodedData);
+      if (mappedFieldsCount === 0) {
+        Alert.alert(
+          "Brak dopasowanych danych",
+          "Kod zostal odczytany, ale nie znaleziono pol do uzupelnienia w formularzu.",
+        );
+        return;
+      }
       setAztecScannerOpen(false);
       Alert.alert("Sukces", "Dane z kodu Aztec zostały uzupełnione.");
     } catch {
