@@ -67,9 +67,7 @@ class ReportRepository {
   }
 
   async getUnsyncedReportsCount(): Promise<number> {
-    return await this.reports
-      .query(Q.where("report_state", Q.oneOf(["pending", "error"])))
-      .fetchCount();
+    return await this.reports.query(Q.where("report_state", Q.oneOf(["pending", "error"]))).fetchCount();
   }
 
   async getReportById(id: string): Promise<ReportModel | null> {
