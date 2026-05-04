@@ -5,7 +5,7 @@ import { useReportsListViewModel } from "@/features/index/hooks/useReportsListVi
 import { View } from "react-native";
 
 export default function HomeScreen() {
-  const { filters, options, refresh, reports } = useReportsListViewModel();
+  const { filters, options, refresh, reports, isSyncing } = useReportsListViewModel();
 
   return (
     <View className="flex-1">
@@ -19,6 +19,7 @@ export default function HomeScreen() {
         onSortChange={filters.setSort}
         onStatusChange={filters.setStatus}
         onRefresh={() => void refresh()}
+        isSyncing={isSyncing}
       />
       <List reports={reports} />
       <Footer />

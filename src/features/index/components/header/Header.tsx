@@ -15,6 +15,7 @@ export default function Header({
   onSortChange,
   onStatusChange,
   onRefresh,
+  isSyncing,
 }: {
   searchValue: string;
   onSearchChange: (value: string) => void;
@@ -25,10 +26,11 @@ export default function Header({
   onSortChange: (option: Option | null) => void;
   onStatusChange: (option: Option | null) => void;
   onRefresh: () => void;
+  isSyncing: boolean;
 }) {
   return (
     <HeaderComponent>
-      <HeaderTopBar onRefresh={onRefresh} />
+      <HeaderTopBar onRefresh={onRefresh} isSyncing={isSyncing} />
       <HeaderSearch searchValue={searchValue} onSearchChange={onSearchChange} />
       <HeaderFilters
         sort={sort}

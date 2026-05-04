@@ -1,6 +1,6 @@
 import reportRepository from "@/database/repositories/ReportRepository";
 import { syncAllData } from "@/features/sync/services/sync-all-data";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { REPORT_LIST_SORT_OPTIONS, REPORT_LIST_STATUS_OPTIONS } from "../constants/constants";
 import type { ReportListItemVM } from "../types/types";
 import {
@@ -13,6 +13,7 @@ import { useReportFilters } from "./useReportFilters";
 export function useReportsListViewModel() {
   const filters = useReportFilters();
   const { search, sort, status, hydrated } = filters;
+  const hasStartedInitialSync = useRef(false);
 
   const [reports, setReports] = useState<ReportListItemVM[]>([]);
   const [isLoading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ export function useReportsListViewModel() {
     [search, sort!.value, status!.value],
   );
 
-  const loadReports = useCallback(async () => {
+  useEffect(() => {
     if (!hydrated) {
       return;
     }
@@ -36,14 +37,24 @@ export function useReportsListViewModel() {
     setLoading(true);
     setError(null);
 
-    try {
-      const records = await reportRepository.queryReports(repoFilters);
-      setReports(records.map(mapReportToListItemVM));
-    } catch (e) {
-      setError(e instanceof Error ? e : new Error("Błąd podczas ładowania raportów"));
-    } finally {
-      setLoading(false);
-    }
+    const subscription = reportRepository
+      .queryReportsObservable(repoFilters)
+      .subscribe({
+        next: (records) => {
+          setReports(records.map(mapReportToListItemVM));
+          setLoading(false);
+        },
+        error: (e) => {
+          setError(
+            e instanceof Error ? e : new Error("Błąd podczas ładowania raportów"),
+          );
+          setLoading(false);
+        },
+      });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [repoFilters, hydrated]);
 
   const refresh = useCallback(async () => {
@@ -58,17 +69,22 @@ export function useReportsListViewModel() {
       setIsSyncing(false);
     }
 
-    await loadReports();
-  }, [loadReports]);
+  }, []);
 
   useEffect(() => {
-    void loadReports();
-  }, [loadReports]);
+    if (!hydrated || hasStartedInitialSync.current) {
+      return;
+    }
+
+    hasStartedInitialSync.current = true;
+    void refresh();
+  }, [hydrated, refresh]);
 
   return useMemo(
     () => ({
       reports,
-      isLoading: isLoading || !hydrated || isSyncing,
+      isLoading: isLoading || !hydrated,
+      isSyncing,
       filters,
       error,
       options: {

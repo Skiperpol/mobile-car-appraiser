@@ -1,5 +1,6 @@
 import ReportModel, { IReport } from "@/database/models/ReportModel";
 import { Database, Q } from "@nozbe/watermelondb";
+import type { Observable } from "rxjs";
 import { database } from "..";
 
 export type ReportSortBy = "createdAtDesc" | "createdAtAsc" | "reportNumberAsc";
@@ -64,6 +65,52 @@ class ReportRepository {
     }
 
     return await this.reports.query(...clauses).fetch();
+  }
+
+  queryReportsObservable(filters: {
+    search?: string;
+    sortBy?: ReportSortBy;
+    status?: ReportStatusFilter;
+  }): Observable<ReportModel[]> {
+    const clauses = [];
+    const search = filters.search?.trim();
+    const sortBy = filters.sortBy ?? "createdAtDesc";
+    const status = filters.status ?? "all";
+
+    if (search) {
+      clauses.push(
+        Q.or(
+          Q.where("report_number", Q.like(`%${Q.sanitizeLikeString(search)}%`)),
+          Q.where("order_id", Q.like(`%${Q.sanitizeLikeString(search)}%`)),
+        ),
+      );
+    }
+
+    if (status === "synced") {
+      clauses.push(Q.where("report_state", "synced"));
+    }
+
+    if (status === "pending") {
+      clauses.push(Q.where("report_state", "pending"));
+    }
+
+    if (status === "error") {
+      clauses.push(Q.where("report_state", "error"));
+    }
+
+    if (sortBy === "createdAtAsc") {
+      clauses.push(Q.sortBy("created_at", Q.asc));
+    }
+
+    if (sortBy === "reportNumberAsc") {
+      clauses.push(Q.sortBy("report_number", Q.asc));
+    }
+
+    if (sortBy === "createdAtDesc") {
+      clauses.push(Q.sortBy("created_at", Q.desc));
+    }
+
+    return this.reports.query(...clauses).observe();
   }
 
   async getUnsyncedReportsCount(): Promise<number> {
