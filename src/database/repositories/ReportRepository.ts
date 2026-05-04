@@ -70,6 +70,18 @@ class ReportRepository {
     return await this.reports.query(Q.where("report_state", Q.oneOf(["pending", "error"]))).fetchCount();
   }
 
+  async getByReportNumber(reportNumber: string): Promise<ReportModel | null> {
+    const normalized = reportNumber.trim();
+    if (!normalized) {
+      return null;
+    }
+
+    const records = await this.reports
+      .query(Q.where("report_number", normalized), Q.take(1))
+      .fetch();
+    return records[0] ?? null;
+  }
+
   async getReportById(id: string): Promise<ReportModel | null> {
     try {
       return await this.reports.find(id);
