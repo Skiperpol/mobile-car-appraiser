@@ -28,12 +28,18 @@ export async function loginWithPassword(email: string, password: string): Promis
       }
 
       const payload = error.response.data;
+      const isInvalidCredentials =
+        error.response.status === 401 &&
+        formatValidationMessage(payload)?.toLowerCase() === "invalid email or password";
+
       throw new AuthApiError(
-        formatValidationMessage(payload) || error.message || "Unknown error",
+        isInvalidCredentials
+          ? "Nieprawidłowe dane logowania."
+          : formatValidationMessage(payload) || error.message || "Unknown error",
         error.response.status,
       );
     }
-    throw new AuthApiError("Wystąpił nieoczekiwany błąd.", 0);
+    throw new AuthApiError("Wystąpił nieoczekiwany błąd. " + (error as Error).message, 0);
   }
 }
 

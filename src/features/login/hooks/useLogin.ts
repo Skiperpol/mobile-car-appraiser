@@ -34,7 +34,7 @@ export function useLogin() {
         data.email,
         data.password,
       );
-      setAccessToken(accessToken);
+      await setAccessToken(accessToken);
       router.replace("/(tabs)");
     } catch (e) {
       setServerError(e instanceof Error ? e.message : "Błąd logowania");
