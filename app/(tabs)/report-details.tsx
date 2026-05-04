@@ -1,3 +1,4 @@
+import { AddPhotoSourceModal } from "@/features/report-details/components/content/AddPhotoSourceModal";
 import { PhotoCommentModal } from "@/features/report-details/components/content/PhotoCommentModal";
 import { PhotosGridCard } from "@/features/report-details/components/content/PhotosGridCard";
 import { ReportDetailsBottomBar } from "@/features/report-details/components/content/ReportDetailsBottomBar";
@@ -73,6 +74,15 @@ export default function ReportDetailsScreen() {
         onCommentChange={setPhotoComment}
         onClose={() => setPhotoModalOpen(false)}
         onSave={handleSaveComment}
+      />
+
+      <AddPhotoSourceModal
+        visible={vm.isPhotoSourceModalOpen}
+        permissionMessage={vm.photoPermissionMessage}
+        onClose={vm.closePhotoSourceModal}
+        onTakePhoto={() => void vm.takePhotoWithCamera()}
+        onPickFromGallery={() => void vm.pickPhotoFromGallery()}
+        onOpenSettings={vm.openAppSettings}
       />
     </View>
   );

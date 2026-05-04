@@ -5,13 +5,17 @@ import type { ReportDetails } from "@/features/report-details/types/types";
 import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert } from "react-native";
+import { Linking } from "react-native";
 
 const REPORTS_DIR = `${FileSystem.documentDirectory}reports`;
 
 export function useReportDetailsViewModel(reportId?: string) {
   const [details, setDetails] = useState<ReportDetails | null>(null);
   const [isLoading, setLoading] = useState(true);
+  const [isPhotoSourceModalOpen, setPhotoSourceModalOpen] = useState(false);
+  const [photoPermissionMessage, setPhotoPermissionMessage] = useState<
+    string | null
+  >(null);
 
   const load = useCallback(async () => {
     if (!reportId) {
@@ -64,12 +68,12 @@ export function useReportDetailsViewModel(reportId?: string) {
     void load();
   }, [load]);
 
-  const addPhoto = useCallback(async () => {
-    if (!reportId) {
-      return;
-    }
+  const savePickedAsset = useCallback(
+    async (asset: ImagePicker.ImagePickerAsset) => {
+      if (!reportId) {
+        return;
+      }
 
-    const handlePickedAsset = async (asset: ImagePicker.ImagePickerAsset) => {
       const extension = asset.fileName?.split(".").pop() ?? "jpg";
       const name = `${Date.now()}.${extension}`;
       const reportDir = `${REPORTS_DIR}/${reportId}`;
@@ -95,50 +99,71 @@ export function useReportDetailsViewModel(reportId?: string) {
       }
 
       await load();
-    };
+    },
+    [load, reportId],
+  );
 
-    const pickFromGallery = async () => {
-      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!permission.granted) {
-        Alert.alert("Brak uprawnienia", "Nadaj dostep do galerii, aby wybrac zdjecie.");
-        return;
-      }
+  const addPhoto = useCallback(() => {
+    setPhotoPermissionMessage(null);
+    setPhotoSourceModalOpen(true);
+  }, []);
 
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        quality: 0.8,
-      });
-      if (result.canceled || result.assets.length === 0) {
-        return;
-      }
+  const pickPhotoFromGallery = useCallback(async () => {
+    if (!reportId) {
+      return;
+    }
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      setPhotoPermissionMessage(
+        "Nadaj dostep do galerii, aby wybrac zdjecie.",
+      );
+      return;
+    }
 
-      await handlePickedAsset(result.assets[0]);
-    };
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      quality: 0.8,
+    });
+    if (result.canceled || result.assets.length === 0) {
+      return;
+    }
 
-    const takePhoto = async () => {
-      const permission = await ImagePicker.requestCameraPermissionsAsync();
-      if (!permission.granted) {
-        Alert.alert("Brak uprawnienia", "Nadaj dostep do kamery, aby zrobic zdjecie.");
-        return;
-      }
+    await savePickedAsset(result.assets[0]);
+    setPhotoSourceModalOpen(false);
+    setPhotoPermissionMessage(null);
+  }, [reportId, savePickedAsset]);
 
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ["images"],
-        quality: 0.8,
-      });
-      if (result.canceled || result.assets.length === 0) {
-        return;
-      }
+  const takePhotoWithCamera = useCallback(async () => {
+    if (!reportId) {
+      return;
+    }
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      setPhotoPermissionMessage("Nadaj dostep do kamery, aby zrobic zdjecie.");
+      return;
+    }
 
-      await handlePickedAsset(result.assets[0]);
-    };
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ["images"],
+      quality: 0.8,
+    });
+    if (result.canceled || result.assets.length === 0) {
+      return;
+    }
 
-    Alert.alert("Dodaj zdjecie", "Wybierz zrodlo zdjecia", [
-      { text: "Aparat", onPress: () => void takePhoto() },
-      { text: "Galeria", onPress: () => void pickFromGallery() },
-      { text: "Anuluj", style: "cancel" },
-    ]);
-  }, [load, reportId]);
+    await savePickedAsset(result.assets[0]);
+    setPhotoSourceModalOpen(false);
+    setPhotoPermissionMessage(null);
+  }, [reportId, savePickedAsset]);
+
+  const closePhotoSourceModal = useCallback(() => {
+    setPhotoSourceModalOpen(false);
+    setPhotoPermissionMessage(null);
+  }, []);
+
+  const openAppSettings = useCallback(() => {
+    void Linking.openSettings();
+  }, []);
 
   const savePhotoComment = useCallback(
     async (photoId: string, comment: string) => {
@@ -155,9 +180,27 @@ export function useReportDetailsViewModel(reportId?: string) {
       details,
       isLoading,
       addPhoto,
+      isPhotoSourceModalOpen,
+      photoPermissionMessage,
+      closePhotoSourceModal,
+      pickPhotoFromGallery,
+      takePhotoWithCamera,
+      openAppSettings,
       savePhotoComment,
       refresh: load,
     }),
-    [details, isLoading, addPhoto, savePhotoComment, load],
+    [
+      details,
+      isLoading,
+      addPhoto,
+      isPhotoSourceModalOpen,
+      photoPermissionMessage,
+      closePhotoSourceModal,
+      pickPhotoFromGallery,
+      takePhotoWithCamera,
+      openAppSettings,
+      savePhotoComment,
+      load,
+    ],
   );
 }

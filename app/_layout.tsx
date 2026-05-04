@@ -1,6 +1,6 @@
+import { PortalHost } from "@rn-primitives/portal";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { PortalHost } from "@rn-primitives/portal";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import "../global.css";
@@ -22,7 +22,7 @@ export default function RootLayout() {
     <>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen name="modal" options={{ presentation: "transparentModal" }} />
       </Stack>
       <PortalHost />
     </>
