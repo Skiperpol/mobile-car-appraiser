@@ -1,41 +1,46 @@
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { X } from "lucide-react-native";
+import { Minus, Plus, Sun, X } from "lucide-react-native";
 import { type ComponentType, useEffect, useMemo, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Keyboard,
-  Linking,
-  Modal,
-  Pressable,
-  View,
-} from "react-native";
+import { ActivityIndicator, Keyboard, Linking, Modal, Pressable, View } from "react-native";
 import Animated, { SlideInDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-let ExpoCameraModule:
-  | null
-  | {
-      CameraView?: ComponentType<{
-        style?: unknown;
-        barcodeScannerSettings?: { barcodeTypes?: string[] };
-        onBarcodeScanned?: (event: { data: string; type?: string }) => void;
-      }>;
-      requestCameraPermissionsAsync?: () => Promise<{
-        granted: boolean;
-        canAskAgain?: boolean;
-      }>;
-      getCameraPermissionsAsync?: () => Promise<{
-        granted: boolean;
-        canAskAgain?: boolean;
-      }>;
-    } = null;
+let ExpoCameraModule: null | {
+  CameraView?: ComponentType<{
+    pictureSize?: string;
+    zoom?: number;
+    autofocus?: "on" | "off";
+    enableTorch?: boolean;
+    style?: unknown;
+    barcodeScannerEnabled?: boolean;
+    barcodeScannerSettings?: { barcodeTypes?: string[] };
+    onCameraReady?: () => void;
+    onMountError?: () => void;
+    onBarcodeScanned?: (event: { data: string; type?: string }) => void;
+  }>;
+  requestCameraPermissionsAsync?: () => Promise<{
+    granted: boolean;
+    canAskAgain?: boolean;
+  }>;
+  getCameraPermissionsAsync?: () => Promise<{
+    granted: boolean;
+    canAskAgain?: boolean;
+  }>;
+} = null;
 
 try {
   const module = require("expo-camera") as {
     CameraView?: ComponentType<{
+      pictureSize?: string;
+      zoom?: number;
+      autofocus?: "on" | "off";
+      enableTorch?: boolean;
       style?: unknown;
+      barcodeScannerEnabled?: boolean;
       barcodeScannerSettings?: { barcodeTypes?: string[] };
+      onCameraReady?: () => void;
+      onMountError?: () => void;
       onBarcodeScanned?: (event: { data: string; type?: string }) => void;
     }>;
     requestCameraPermissionsAsync?: () => Promise<{
@@ -48,8 +53,15 @@ try {
     }>;
     default?: {
       CameraView?: ComponentType<{
+        pictureSize?: string;
+        zoom?: number;
+        autofocus?: "on" | "off";
+        enableTorch?: boolean;
         style?: unknown;
+        barcodeScannerEnabled?: boolean;
         barcodeScannerSettings?: { barcodeTypes?: string[] };
+        onCameraReady?: () => void;
+        onMountError?: () => void;
         onBarcodeScanned?: (event: { data: string; type?: string }) => void;
       }>;
       requestCameraPermissionsAsync?: () => Promise<{
@@ -66,10 +78,8 @@ try {
   ExpoCameraModule = {
     CameraView: module.CameraView ?? module.default?.CameraView,
     requestCameraPermissionsAsync:
-      module.requestCameraPermissionsAsync ??
-      module.default?.requestCameraPermissionsAsync,
-    getCameraPermissionsAsync:
-      module.getCameraPermissionsAsync ?? module.default?.getCameraPermissionsAsync,
+      module.requestCameraPermissionsAsync ?? module.default?.requestCameraPermissionsAsync,
+    getCameraPermissionsAsync: module.getCameraPermissionsAsync ?? module.default?.getCameraPermissionsAsync,
   };
 } catch {
   ExpoCameraModule = null;
@@ -82,29 +92,24 @@ type AztecScannerModalProps = {
   onScan: (value: string) => void;
 };
 
-export function AztecScannerModal({
-  visible,
-  isProcessing,
-  onClose,
-  onScan,
-}: AztecScannerModalProps) {
+export function AztecScannerModal({ visible, isProcessing, onClose, onScan }: AztecScannerModalProps) {
   const insets = useSafeAreaInsets();
   const [isPermissionLoading, setPermissionLoading] = useState(true);
   const [isPermissionGranted, setPermissionGranted] = useState(false);
   const [canAskForPermission, setCanAskForPermission] = useState(true);
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [scanDebugInfo, setScanDebugInfo] = useState<string | null>(null);
+  const [detectedEventsCount, setDetectedEventsCount] = useState(0);
+  const [isCameraReady, setCameraReady] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(0.25);
+  const [isTorchEnabled, setTorchEnabled] = useState(false);
   const lastScanAtRef = useRef(0);
-  const didDispatchScanRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
 
     const loadPermission = async () => {
-      if (
-        !ExpoCameraModule?.getCameraPermissionsAsync ||
-        !ExpoCameraModule?.requestCameraPermissionsAsync
-      ) {
+      if (!ExpoCameraModule?.getCameraPermissionsAsync || !ExpoCameraModule?.requestCameraPermissionsAsync) {
         if (isMounted) {
           setPermissionLoading(false);
           setPermissionGranted(false);
@@ -132,9 +137,7 @@ export function AztecScannerModal({
         if (isMounted) {
           setPermissionGranted(false);
           setCanAskForPermission(true);
-          setPermissionError(
-            "Nie udało się odczytać uprawnień kamery. Spróbuj ponownie.",
-          );
+          setPermissionError("Nie udało się odczytać uprawnień kamery. Spróbuj ponownie.");
         }
       } finally {
         if (isMounted) {
@@ -157,15 +160,13 @@ export function AztecScannerModal({
     if (visible) {
       Keyboard.dismiss();
       setScanDebugInfo(null);
-      didDispatchScanRef.current = false;
+      setDetectedEventsCount(0);
+      setCameraReady(false);
+      setZoomLevel(0.25);
+      setTorchEnabled(false);
+      lastScanAtRef.current = 0;
     }
   }, [visible]);
-
-  useEffect(() => {
-    if (!isProcessing) {
-      didDispatchScanRef.current = false;
-    }
-  }, [isProcessing]);
 
   const requestPermission = async () => {
     if (!ExpoCameraModule?.requestCameraPermissionsAsync) {
@@ -187,8 +188,7 @@ export function AztecScannerModal({
       return (
         <View className="min-h-80 items-center justify-start gap-3 py-3">
           <Text className="text-sm text-zinc-700">
-            Skaner kodu Aztec wymaga przebudowania aplikacji natywnej po
-            instalacji `expo-camera`.
+            Skaner kodu Aztec wymaga przebudowania aplikacji natywnej po instalacji `expo-camera`.
           </Text>
         </View>
       );
@@ -205,8 +205,23 @@ export function AztecScannerModal({
     return (
       <View className="h-80 overflow-hidden rounded-main">
         <ExpoCameraModule.CameraView
+          pictureSize="1080p"
+          zoom={zoomLevel}
+          autofocus="off"
+          enableTorch={isTorchEnabled}
           style={{ height: "100%" }}
-          barcodeScannerSettings={{ barcodeTypes: ["aztec"] }}
+          barcodeScannerEnabled
+          barcodeScannerSettings={{
+            barcodeTypes: ["aztec", "pdf417", "qr", "datamatrix", "code128"],
+          }}
+          onCameraReady={() => {
+            setCameraReady(true);
+            setPermissionGranted(true);
+            setPermissionError(null);
+          }}
+          onMountError={() => {
+            setCameraReady(false);
+          }}
           onBarcodeScanned={(event: { data: string; type?: string }) => {
             const now = Date.now();
             if (now - lastScanAtRef.current < 800) {
@@ -218,43 +233,68 @@ export function AztecScannerModal({
             setScanDebugInfo(
               `Wykryto kod: typ=${event.type ?? "unknown"}, dlugosc=${event.data.length}, start="${compactPreview}"`,
             );
+            setDetectedEventsCount((prev) => prev + 1);
 
             if (isProcessing) {
               return;
             }
-            if (didDispatchScanRef.current) {
-              return;
+            const normalizedType = (event.type ?? "").toLowerCase();
+            const looksLikeAztecPayload = event.data.length > 90 && /^[A-Za-z0-9+/=\s,:%-]+$/.test(event.data);
+
+            if (
+              normalizedType.includes("aztec") ||
+              normalizedType === "" ||
+              normalizedType === "unknown" ||
+              looksLikeAztecPayload
+            ) {
+              onScan(event.data);
             }
-            didDispatchScanRef.current = true;
-            onScan(event.data);
           }}
         />
 
-        {!isPermissionGranted ? (
+        {!isPermissionGranted && !isCameraReady ? (
           <View className="absolute left-2 right-2 top-2 rounded-xl bg-white/90 p-3">
             <Text className="text-xs text-zinc-700">
               Status dostepu do kamery jest niepewny, ale skanowanie moze dzialac.
             </Text>
-            {permissionError ? (
-              <Text className="mt-1 text-xs text-rose-600">{permissionError}</Text>
-            ) : null}
+            {permissionError ? <Text className="mt-1 text-xs text-rose-600">{permissionError}</Text> : null}
             <View className="mt-2 flex-row gap-2">
               {canAskForPermission ? (
                 <Button variant="main" className="flex-1" onPress={() => void requestPermission()}>
                   <Text>Ponow prosbe</Text>
                 </Button>
               ) : (
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onPress={() => void Linking.openSettings()}
-                >
+                <Button variant="outline" className="flex-1" onPress={() => void Linking.openSettings()}>
                   <Text>Ustawienia</Text>
                 </Button>
               )}
             </View>
           </View>
         ) : null}
+
+        <View className="absolute bottom-3 right-3 flex-row gap-2">
+          <Button
+            variant={isTorchEnabled ? "main" : "outline"}
+            className="h-9 px-3"
+            onPress={() => setTorchEnabled((prev) => !prev)}
+          >
+            <Sun size={16} color={isTorchEnabled ? "#ffffff" : "#374151"} />
+          </Button>
+          <Button
+            variant="outline"
+            className="h-9 px-3"
+            onPress={() => setZoomLevel((prev) => Math.max(0, Number((prev - 0.1).toFixed(2))))}
+          >
+            <Minus size={16} color="#374151" />
+          </Button>
+          <Button
+            variant="outline"
+            className="h-9 px-3"
+            onPress={() => setZoomLevel((prev) => Math.min(0.7, Number((prev + 0.1).toFixed(2))))}
+          >
+            <Plus size={16} color="#374151" />
+          </Button>
+        </View>
       </View>
     );
   }, [
@@ -264,6 +304,8 @@ export function AztecScannerModal({
     requestPermission,
     onScan,
     isProcessing,
+    zoomLevel,
+    isTorchEnabled,
   ]);
 
   return (
@@ -293,9 +335,13 @@ export function AztecScannerModal({
 
             {content}
 
-            {scanDebugInfo ? (
-              <Text className="mt-3 text-xs text-zinc-500">{scanDebugInfo}</Text>
-            ) : null}
+            {scanDebugInfo ? <Text className="mt-3 text-xs text-zinc-500">{scanDebugInfo}</Text> : null}
+
+            <Text className="mt-2 text-xs text-zinc-600">
+              {detectedEventsCount > 0
+                ? "Wykryto kod. Trwa przekazywanie do dekodera..."
+                : "Skaner aktywny. Czekam na kod Aztec..."}
+            </Text>
 
             {isProcessing ? (
               <View className="mt-4 flex-row items-center gap-2">

@@ -6,11 +6,16 @@ import { syncCreatedReportToBackend } from "@/features/sync/services/sync-create
 import { addReportSchema } from "@/features/add-report/types/schema";
 import { type AddReportFormValues, type Order, type ReportStep } from "@/features/add-report/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Buffer } from "buffer";
 import { router } from "expo-router";
 import PolishVehicleRegistrationCertificateDecoder from "polish-vehicle-registration-certificate-decoder";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert } from "react-native";
+
+if (!globalThis.Buffer) {
+  globalThis.Buffer = Buffer;
+}
 
 export function useAddReportForm() {
   const [step, setStep] = useState<ReportStep>(1);
@@ -176,24 +181,45 @@ export function useAddReportForm() {
       const rawAfterComma = normalizedRaw.includes(",")
         ? normalizedRaw.slice(normalizedRaw.lastIndexOf(",") + 1)
         : normalizedRaw;
+      const strippedStartStop = rawAfterComma
+        .replace(/^START[:\s-]*/i, "")
+        .replace(/[:\s-]*STOP$/i, "");
+      const base64Only = rawAfterComma.replace(/[^A-Za-z0-9+/=]/g, "");
+
+      const decodeUriSafe = (value: string) => {
+        try {
+          return decodeURIComponent(value);
+        } catch {
+          return value;
+        }
+      };
+
       const decodeCandidates = Array.from(
         new Set([
           rawValue,
           normalizedRaw,
           rawAfterComma,
+          strippedStartStop,
+          base64Only,
           normalizedRaw.replace(/\s+/g, ""),
           rawAfterComma.replace(/\s+/g, ""),
-          decodeURIComponent(normalizedRaw),
-          decodeURIComponent(rawAfterComma),
+          strippedStartStop.replace(/\s+/g, ""),
+          base64Only.replace(/\s+/g, ""),
+          decodeUriSafe(normalizedRaw),
+          decodeUriSafe(rawAfterComma),
+          decodeUriSafe(strippedStartStop),
+          decodeUriSafe(base64Only),
         ]),
       ).filter(Boolean);
 
       let decodedData: Record<string, unknown> | null = null;
+      let successfulCandidateIndex = -1;
 
-      for (const candidate of decodeCandidates) {
+      for (const [index, candidate] of decodeCandidates.entries()) {
         try {
           const decoder = new PolishVehicleRegistrationCertificateDecoder(candidate);
           decodedData = decoder.data as unknown as Record<string, unknown>;
+          successfulCandidateIndex = index;
           break;
         } catch {
           // Try next normalized candidate.
