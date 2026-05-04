@@ -1,10 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { CameraView, useCameraPermissions } from "expo-camera";
 import { X } from "lucide-react-native";
-import { useMemo } from "react";
+import { type ComponentType, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, Modal, Pressable, View } from "react-native";
 import Animated, { SlideInDown } from "react-native-reanimated";
+
+let ExpoCameraModule:
+  | null
+  | {
+      CameraView: ComponentType<{
+        style?: unknown;
+        barcodeScannerSettings?: { barcodeTypes?: string[] };
+        onBarcodeScanned?: (event: { data: string }) => void;
+      }>;
+      requestCameraPermissionsAsync?: () => Promise<{ granted: boolean }>;
+      getCameraPermissionsAsync?: () => Promise<{
+        granted: boolean;
+        canAskAgain?: boolean;
+      }>;
+    } = null;
+
+try {
+  ExpoCameraModule = require("expo-camera");
+} catch {
+  ExpoCameraModule = null;
+}
 
 type AztecScannerModalProps = {
   visible: boolean;
@@ -19,13 +39,73 @@ export function AztecScannerModal({
   onClose,
   onScan,
 }: AztecScannerModalProps) {
-  const [permission, requestPermission] = useCameraPermissions();
+  const [isPermissionLoading, setPermissionLoading] = useState(true);
+  const [isPermissionGranted, setPermissionGranted] = useState(false);
+  const [canAskForPermission, setCanAskForPermission] = useState(true);
 
-  const isPermissionGranted = permission?.granted ?? false;
-  const canAskForPermission = permission?.canAskAgain ?? true;
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadPermission = async () => {
+      if (!ExpoCameraModule?.getCameraPermissionsAsync) {
+        if (isMounted) {
+          setPermissionLoading(false);
+          setPermissionGranted(false);
+          setCanAskForPermission(false);
+        }
+        return;
+      }
+
+      try {
+        const result = await ExpoCameraModule.getCameraPermissionsAsync();
+        if (isMounted) {
+          setPermissionGranted(result.granted);
+          setCanAskForPermission(result.canAskAgain ?? true);
+        }
+      } finally {
+        if (isMounted) {
+          setPermissionLoading(false);
+        }
+      }
+    };
+
+    if (visible) {
+      setPermissionLoading(true);
+      void loadPermission();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [visible]);
+
+  const requestPermission = async () => {
+    if (!ExpoCameraModule?.requestCameraPermissionsAsync) {
+      return;
+    }
+    setPermissionLoading(true);
+    try {
+      const result = await ExpoCameraModule.requestCameraPermissionsAsync();
+      setPermissionGranted(result.granted);
+      setCanAskForPermission(true);
+    } finally {
+      setPermissionLoading(false);
+    }
+  };
 
   const content = useMemo(() => {
-    if (!permission) {
+    if (!ExpoCameraModule?.CameraView) {
+      return (
+        <View className="gap-3 py-3">
+          <Text className="text-sm text-zinc-700">
+            Skaner kodu Aztec wymaga przebudowania aplikacji natywnej po
+            instalacji `expo-camera`.
+          </Text>
+        </View>
+      );
+    }
+
+    if (isPermissionLoading) {
       return (
         <View className="items-center justify-center py-8">
           <ActivityIndicator size="small" color="#111827" />
@@ -50,7 +130,7 @@ export function AztecScannerModal({
 
     return (
       <View className="overflow-hidden rounded-main">
-        <CameraView
+        <ExpoCameraModule.CameraView
           style={{ height: 320 }}
           barcodeScannerSettings={{ barcodeTypes: ["aztec"] }}
           onBarcodeScanned={(event) => {
@@ -63,7 +143,7 @@ export function AztecScannerModal({
       </View>
     );
   }, [
-    permission,
+    isPermissionLoading,
     isPermissionGranted,
     canAskForPermission,
     requestPermission,
