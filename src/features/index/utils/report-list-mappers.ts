@@ -26,7 +26,7 @@ export function mapReportToListItemVM(report: ReportModel): ReportListItemVM {
     tileColor: "bg-slate-900",
     plate: report.reportNumber || "Raport",
     carName: report.reportNumber || "Raport pojazdu",
-    completed: report.reportState === "synced",
+    reportState: report.reportState,
     date: formatReportListDate(report.createdAt),
     photos: report.imageName ? "1/1" : "0/0",
   };

@@ -5,7 +5,7 @@ export type ReportListItemVM = {
   tileColor: string;
   plate: string;
   carName: string;
-  completed: boolean;
+  reportState: "synced" | "pending" | "error";
   date: string;
   photos: string;
 };

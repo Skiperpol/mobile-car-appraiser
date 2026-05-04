@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { CircleCheck, Clock3, ImageIcon } from "lucide-react-native";
+import { CircleAlert, CircleCheck, Clock3, ImageIcon } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 
 interface Report {
@@ -7,10 +7,27 @@ interface Report {
   tileColor: string;
   plate: string;
   carName: string;
-  completed: boolean;
+  reportState: "synced" | "pending" | "error";
   date: string;
   photos: string;
 }
+
+function ReportStateIndicator({
+  reportState,
+}: {
+  reportState: "synced" | "pending" | "error";
+}) {
+  if (reportState === "synced") {
+    return <CircleCheck size={22} color="#22c55e" />;
+  }
+
+  if (reportState === "error") {
+    return <CircleAlert size={22} color="#ef4444" />;
+  }
+
+  return <Clock3 size={22} color="#eab308" />;
+}
+
 export default function Item({ report }: { report: Report }) {
   return (
     <Pressable
@@ -35,11 +52,7 @@ export default function Item({ report }: { report: Report }) {
             <Text className="text-sm font-bold text-zinc-900">
               {report.carName}
             </Text>
-            {report.completed ? (
-              <CircleCheck size={22} color="#22c55e" />
-            ) : (
-              <Clock3 size={22} color="#eab308" />
-            )}
+            <ReportStateIndicator reportState={report.reportState} />
           </View>
 
           <Text className="mb-1 text-sm text-zinc-600">{report.id}</Text>
