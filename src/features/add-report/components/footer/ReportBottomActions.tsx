@@ -8,6 +8,7 @@ import { type ReportStep } from "../../types/types";
 type ReportBottomActionsProps = {
   step: ReportStep;
   onOpenCreateOrder: () => void;
+  onOpenAztecScanner: () => void;
   onBackStep: () => void;
   onNext: () => void;
 };
@@ -15,6 +16,7 @@ type ReportBottomActionsProps = {
 export function ReportBottomActions({
   step,
   onOpenCreateOrder,
+  onOpenAztecScanner,
   onBackStep,
   onNext,
 }: ReportBottomActionsProps) {
@@ -34,7 +36,7 @@ export function ReportBottomActions({
 
       {step === 2 ? (
         <>
-          <Button variant="outline">
+          <Button variant="outline" onPress={onOpenAztecScanner}>
             <ScanLine size={18} color="#374151" />
             <Text>Skanuj kod Aztec</Text>
           </Button>

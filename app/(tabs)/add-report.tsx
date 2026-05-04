@@ -1,3 +1,4 @@
+import { AztecScannerModal } from "@/features/add-report/components/content/AztecScannerModal";
 import { CreateOrderModal } from "@/features/add-report/components/content/CreateOrderModal";
 import { StepOneOrderSelection } from "@/features/add-report/components/content/StepOneOrderSelection";
 import { StepTechnicalForm } from "@/features/add-report/components/content/StepTechnicalForm";
@@ -22,6 +23,10 @@ export default function AddReportScreen() {
     setNewOrderName,
     newOrderDescription,
     setNewOrderDescription,
+    isAztecScannerOpen,
+    setAztecScannerOpen,
+    isDecodingAztec,
+    handleAztecScan,
     handleHeaderBack,
     handleBackStep,
     selectOrder,
@@ -51,6 +56,7 @@ export default function AddReportScreen() {
         <ReportBottomActions
           step={step}
           onOpenCreateOrder={() => setCreateOrderOpen(true)}
+          onOpenAztecScanner={() => setAztecScannerOpen(true)}
           onBackStep={handleBackStep}
           onNext={() => void goNext()}
         />
@@ -63,6 +69,12 @@ export default function AddReportScreen() {
           onNameChange={setNewOrderName}
           onDescriptionChange={setNewOrderDescription}
           onCreate={createOrder}
+        />
+        <AztecScannerModal
+          visible={isAztecScannerOpen}
+          isProcessing={isDecodingAztec}
+          onClose={() => setAztecScannerOpen(false)}
+          onScan={(value) => void handleAztecScan(value)}
         />
       </View>
     </FormProvider>

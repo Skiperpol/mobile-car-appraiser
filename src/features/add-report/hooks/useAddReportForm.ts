@@ -2,18 +2,23 @@ import basicDataRepository from "@/database/repositories/BasicDataRepository";
 import reportDynamicValueRepository from "@/database/repositories/ReportDynamicValueModel";
 import reportRepository from "@/database/repositories/ReportRepository";
 import { INITIAL_ADD_REPORT_FORM_VALUES, INITIAL_ORDERS } from "@/features/add-report/constants/constants";
+import { syncCreatedReportToBackend } from "@/features/sync/services/sync-created-report";
 import { addReportSchema } from "@/features/add-report/types/schema";
 import { type AddReportFormValues, type Order, type ReportStep } from "@/features/add-report/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import PolishVehicleRegistrationCertificateDecoder from "polish-vehicle-registration-certificate-decoder";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Alert } from "react-native";
 
 export function useAddReportForm() {
   const [step, setStep] = useState<ReportStep>(1);
   const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
   const [searchValue, setSearchValue] = useState("");
   const [isCreateOrderOpen, setCreateOrderOpen] = useState(false);
+  const [isAztecScannerOpen, setAztecScannerOpen] = useState(false);
+  const [isDecodingAztec, setDecodingAztec] = useState(false);
   const [newOrderName, setNewOrderName] = useState("");
   const [newOrderDescription, setNewOrderDescription] = useState("");
 
@@ -80,6 +85,93 @@ export function useAddReportForm() {
     setCreateOrderOpen(false);
   };
 
+  const applyAztecDataToForm = (decodedData: Record<string, unknown>) => {
+    const registrationNumber =
+      (decodedData.numerRejestracyjnyPojazdu as { value?: string } | undefined)
+        ?.value ?? "";
+    const make =
+      (decodedData.markaPojazdu as { value?: string } | undefined)?.value ?? "";
+    const model =
+      (decodedData.modelPojazdu as { value?: string } | undefined)?.value ?? "";
+    const vin =
+      (decodedData.numerIdentyfikacyjnyPojazdu as { value?: string } | undefined)
+        ?.value ?? "";
+    const productionYear =
+      (decodedData.rokProdukcji as { value?: string } | undefined)?.value ?? "";
+
+    const maxWeight =
+      (decodedData.dopuszczalnaMasaCalkowitaPojazduKg as
+        | { value?: string }
+        | undefined)?.value ?? "";
+    const bodyType =
+      (decodedData.rodzajPojazdu as { value?: string } | undefined)?.value ?? "";
+    const driveUnit =
+      (decodedData.rodzajPaliwa as
+        | { valueDescription?: string; value?: string }
+        | undefined)?.valueDescription ||
+      (decodedData.rodzajPaliwa as { value?: string } | undefined)?.value ||
+      "";
+    const engineCapacity =
+      (decodedData.pojemnoscSilnikaCm3 as { value?: string } | undefined)?.value ??
+      "";
+    const enginePower =
+      (decodedData.maksymalnaMocNettoSilnikaKW as { value?: string } | undefined)
+        ?.value ?? "";
+
+    if (registrationNumber) {
+      setValue("vehicle.registrationNumber", registrationNumber);
+    }
+    if (make) {
+      setValue("vehicle.make", make);
+    }
+    if (model) {
+      setValue("vehicle.model", model);
+    }
+    if (vin) {
+      setValue("vehicle.vin", vin);
+    }
+    if (productionYear) {
+      setValue("vehicle.productionYear", productionYear);
+    }
+    if (maxWeight) {
+      setValue("technical.maxWeight", maxWeight);
+    }
+    if (bodyType) {
+      setValue("technical.bodyType", bodyType);
+    }
+    if (driveUnit) {
+      setValue("technical.driveUnit", driveUnit);
+    }
+    if (engineCapacity) {
+      setValue("technical.engineCapacity", engineCapacity);
+    }
+    if (enginePower) {
+      setValue("technical.enginePower", enginePower);
+    }
+  };
+
+  const handleAztecScan = async (rawValue: string) => {
+    if (isDecodingAztec) {
+      return;
+    }
+
+    setDecodingAztec(true);
+    try {
+      const decoder = new PolishVehicleRegistrationCertificateDecoder(rawValue);
+      const decodedData = decoder.data as unknown as Record<string, unknown>;
+      applyAztecDataToForm(decodedData);
+      setAztecScannerOpen(false);
+      Alert.alert("Sukces", "Dane z kodu Aztec zostały uzupełnione.");
+    } catch {
+      Alert.alert(
+        "Błąd skanowania",
+        "Nie udało się odczytać danych z kodu Aztec. Spróbuj ponownie.",
+      );
+    } finally {
+      setDecodingAztec(false);
+    }
+  };
+
   const goNext = async () => {
     if (step === 1) {
       const isValid = await trigger("selectedOrderId");
@@ -133,6 +225,18 @@ export function useAddReportForm() {
         ),
       );
 
+      void syncCreatedReportToBackend({
+        localReportId: createdReport.id,
+        reportNumber: values.vehicle.reportNumber,
+        vehicle: {
+          make: values.vehicle.make,
+          model: values.vehicle.model,
+          vin: values.vehicle.vin,
+          registrationNumber: values.vehicle.registrationNumber,
+          productionYear: values.vehicle.productionYear,
+        },
+      });
+
       router.replace({
         pathname: "./report-details",
         params: {
@@ -157,6 +261,10 @@ export function useAddReportForm() {
     setNewOrderName,
     newOrderDescription,
     setNewOrderDescription,
+    isAztecScannerOpen,
+    setAztecScannerOpen,
+    isDecodingAztec,
+    handleAztecScan,
     handleHeaderBack,
     handleBackStep,
     selectOrder,
