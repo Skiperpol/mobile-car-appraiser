@@ -2,8 +2,8 @@ import { FormField } from "@/components/forms/FormField";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { X } from "lucide-react-native";
-import { Keyboard, Modal, Pressable, View } from "react-native";
 import { useEffect } from "react";
+import { Keyboard, Modal, Pressable, View } from "react-native";
 import Animated, { SlideInDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
